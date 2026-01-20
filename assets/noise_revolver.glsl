@@ -24,11 +24,13 @@ vec3 rgb2hsv(vec3 c) {
 void main( void ) {
     vec2 uv = fragCoord / resolution.xy;
 
-    vec4 texColor = texture2D(iChannel0, vec2(time * 0.65, 0.0) - uv);
+    vec4 texColor = texture2D(iChannel0, vec2(time * 0.48, 0.0) - uv);
 
     vec3 hsv = rgb2hsv(texColor.rgb);
 
-    float opacity = sin(time * 2.0 + hsv.x * PI * 2.0) + cos(hsv.z * PI * 2.0) - hsv.y * 8.0;
+    float streak = sin(time + hsv.x * PI * 2.0) + cos(hsv.z * PI * 2.0) - hsv.y * 8.0;
 
-    gl_FragColor = vec4(min(vec3(1.0), mix(vec3(opacity), texColor.rgb * opacity, 1.0)), 0.0);
+    vec3 color = clamp(texColor.rgb * streak, 0.0, 0.333);
+
+    gl_FragColor = vec4(color, 0.0);
 }
