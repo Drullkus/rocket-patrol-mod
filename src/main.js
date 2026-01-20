@@ -2,7 +2,7 @@
 
 Modification Title:
 
-Time taken to modify: 2 hours (by far)
+Time taken to modify: 4 hours (by far)
 
 Modifications implemented:
   3-Point Tier
