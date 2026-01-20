@@ -57,17 +57,17 @@ class Menu extends Phaser.Scene {
                 rocketSpeed: 125,
                 spaceshipSpeed: 185,
                 gameTimer: 60000
-            }
-            this.sound.play('sfx-select')
-            this.scene.start('playScene')
+            };
+            this.sound.play('sfx-select');
+            this.scene.start('playScene');
         } else if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             game.settings = {
                 rocketSpeed: 125,
                 spaceshipSpeed: 250,
                 gameTimer: 45000
-            }
-            this.sound.play('sfx-select')
-            this.scene.start('playScene')
+            };
+            this.sound.play('sfx-select');
+            this.scene.start('playScene');
         }
     }
 }
