@@ -4,8 +4,16 @@ class Play extends Phaser.Scene {
     }
     
     create() {
-        // place tile sprite
-        this.starfield = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield').setOrigin(0, 0);
+        // Background
+        this.spaceBackground = this.scene.add('spaceBackgroundScene', SpaceBackground, false);
+        this.scene.launch('spaceBackgroundScene');
+
+        // Inspired by Factorio https://factorio.com/blog/post/fff-411
+        this.spaceBackground.addLayer('space_dust', 250);
+        this.spaceBackground.addLayer('starfield', 250 * 0.333).scale = 1.5;
+        let distantStars = this.spaceBackground.addLayer('starfield', 250 * 0.125);
+        distantStars.tilePositionY += gameHeight * 0.5;
+        distantStars.setTint(0xAA_AA_AA);
 
         // UI
         this.scoreOverlay = this.scene.add('scoreOverlayScene', ScoreOverlay, false);
@@ -36,15 +44,14 @@ class Play extends Phaser.Scene {
 
     update(_time, deltaMillis) {
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyRESET)) {
+            this.scene.remove('spaceBackgroundScene');
             this.scene.remove('scoreOverlayScene');
             this.scene.restart();
         }
-
-        const deltaSeconds = deltaMillis / 1000;
-
-        this.starfield.tilePositionX -= 250 * deltaSeconds;
         
         if (!this.gameOver) {
+            const deltaSeconds = deltaMillis / 1000;
+
             this.p1Rocket.update(deltaSeconds);
             this.ship01.update(deltaSeconds);
             this.ship02.update(deltaSeconds);

@@ -1,3 +1,16 @@
+/*
+
+Modification Title:
+
+Time taken to modify: 2 hours (by far)
+
+Modifications implemented:
+  3-Point Tier
+  - Implement parallax scrolling for the background
+
+Citations inlined as comments near relevant code
+*/
+
 "use strict";
 
 console.log("hello internet");
