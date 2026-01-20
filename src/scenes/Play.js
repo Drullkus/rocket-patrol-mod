@@ -7,8 +7,9 @@ class Play extends Phaser.Scene {
         // place tile sprite
         this.starfield = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield').setOrigin(0, 0);
 
-        // green UI background
-        this.add.rectangle(0, borderUISize + borderPadding, gameWidth, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
+        // UI
+        this.scoreOverlay = this.scene.add('scoreOverlayScene', ScoreOverlay, false);
+        this.scene.launch('scoreOverlayScene');
 
         const borderColor = 0xFF_FF_FF; // White
         // white borders
@@ -28,23 +29,6 @@ class Play extends Phaser.Scene {
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
-        this.p1Score = 0;
-
-        const scoreConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5
-            },
-            fixedWidth: 100
-        };
-
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
-
         this.gameOver = false;
 
         this.clock = this.time.delayedCall(game.settings.gameTimer, this.setGameOver, null, this);
@@ -52,6 +36,7 @@ class Play extends Phaser.Scene {
 
     update(_time, deltaMillis) {
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyRESET)) {
+            this.scene.remove('scoreOverlayScene');
             this.scene.restart();
         }
 
@@ -101,15 +86,13 @@ class Play extends Phaser.Scene {
             boom.destroy();
         });
 
-        this.p1Score += ship.points;
-        this.scoreLeft.text = this.p1Score;
+        this.scoreOverlay.addScore(ship.points);
 
         this.sound.play('sfx-explosion');
     }
 
     setGameOver() {
-
-        const scoreConfig = {
+        const textConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
             backgroundColor: '#F3B141',
@@ -122,8 +105,8 @@ class Play extends Phaser.Scene {
             fixedWidth: 0
         };
 
-        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'GAME OVER', scoreConfig).setOrigin(0.5);
-        this.add.text(gameWidth * 0.5, gameHeight * 0.5 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'GAME OVER', textConfig).setOrigin(0.5);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.5 + 64, 'Press (R) to Restart', textConfig).setOrigin(0.5);
 
         this.gameOver = true;
     }
