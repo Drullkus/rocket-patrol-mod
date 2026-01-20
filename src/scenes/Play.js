@@ -50,18 +50,20 @@ class Play extends Phaser.Scene {
         this.clock = this.time.delayedCall(game.settings.gameTimer, this.setGameOver, null, this);
     }
 
-    update() {
+    update(_time, deltaMillis) {
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyRESET)) {
             this.scene.restart();
         }
 
-        this.starfield.tilePositionX -= 4;
+        const deltaSeconds = deltaMillis / 1000;
+
+        this.starfield.tilePositionX -= 250 * deltaSeconds;
         
         if (!this.gameOver) {
-            this.p1Rocket.update();
-            this.ship01.update();
-            this.ship02.update();
-            this.ship03.update();
+            this.p1Rocket.update(deltaSeconds);
+            this.ship01.update(deltaSeconds);
+            this.ship02.update(deltaSeconds);
+            this.ship03.update(deltaSeconds);
         }
 
         // check collisions
