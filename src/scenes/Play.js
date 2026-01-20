@@ -7,7 +7,6 @@ class Play extends Phaser.Scene {
         // Background
         this.spaceBackground = this.scene.add('spaceBackgroundScene', SpaceBackground, false);
         this.scene.launch('spaceBackgroundScene');
-        this.spaceBackground.configureLayers();
 
         // UI
         this.scoreOverlay = this.scene.add('scoreOverlayScene', ScoreOverlay, false);
@@ -20,7 +19,7 @@ class Play extends Phaser.Scene {
         this.add.rectangle(0, 0, borderUISize, gameHeight, borderColor).setOrigin(0, 0); // Left
         this.add.rectangle(gameWidth - borderUISize, 0, borderUISize, gameHeight, borderColor).setOrigin(0, 0); // Right
 
-        this.p1Rocket = new Rocket(this, gameWidth/2, gameHeight - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
+        this.p1Rocket = new Rocket(this, gameWidth * 0.5, gameHeight - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
 
         this.ship01 = new Spaceship(this, gameWidth + borderUISize * 6, borderUISize * 4 + borderPadding * 0, 'spaceship', 0, 30).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20).setOrigin(0, 0);
@@ -44,7 +43,7 @@ class Play extends Phaser.Scene {
         }
         
         if (!this.gameOver) {
-            const deltaSeconds = deltaMillis / 1000;
+            const deltaSeconds = deltaMillis * 0.001;
 
             this.p1Rocket.update(deltaSeconds);
             this.ship01.update(deltaSeconds);

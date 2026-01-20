@@ -2,10 +2,10 @@
 class SpaceBackground extends Phaser.Scene {
     constructor() {
         super('spaceBackgroundScene');
-        this.layers = [];
+        this.imageLayers = [];
     }
 
-    configureLayers() {
+    create() {
         // Inspired by Factorio https://factorio.com/blog/post/fff-411
         this.addLayer('space_dust', 250);
 
@@ -19,19 +19,21 @@ class SpaceBackground extends Phaser.Scene {
         const distantStars = this.addLayer('starfield', 250 * 0.125);
         distantStars.tilePositionY += gameHeight * 0.5;
         distantStars.setTint(0x88_AA_CC);
+
+        this.add.shader('noise_revolver', 0, 0, gameWidth, gameHeight, [ 'star_streaks' ]).setOrigin(0, 0).setBlendMode(Phaser.BlendModes.NORMAL);
     }
 
     addLayer(imageName, pixelsPerSecond) {
         // blending modes: https://docs.phaser.io/phaser/blend-mode
         const layer = this.add.tileSprite(0, 0, gameWidth, gameHeight, imageName).setOrigin(0, 0).setBlendMode(Phaser.BlendModes.SCREEN);
-        this.layers.push({pixelsPerSecond, layer});
+        this.imageLayers.push({pixelsPerSecond, layer});
         return layer; // For any additional configuration
     }
 
     update(_time, deltaMillis) {
-        const deltaSeconds = deltaMillis / 1000;
+        const deltaSeconds = deltaMillis * 0.001;
 
-        this.layers.forEach(({pixelsPerSecond, layer}) => {
+        this.imageLayers.forEach(({pixelsPerSecond, layer}) => {
             layer.tilePositionX -= pixelsPerSecond * deltaSeconds;
         })
     }

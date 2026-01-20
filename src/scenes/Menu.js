@@ -9,6 +9,7 @@ class Menu extends Phaser.Scene {
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('starfield', './assets/starfield.png');
         this.load.image('space_dust', './assets/space_dust.png');
+        this.load.image('star_streaks', './assets/star_streaks.png');
         this.load.spritesheet('explosion', './assets/explosion.png', {
             frameWidth: 64,
             frameHeight: 32,
@@ -20,6 +21,9 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx-select', './assets/sfx-select.wav');
         this.load.audio('sfx-explosion', './assets/sfx-explosion.wav');
         this.load.audio('sfx-shot', './assets/sfx-shot.wav');
+
+        // shader
+        this.load.glsl('noise_revolver', 'assets/noise_revolver.glsl');
     }
     
     create() {

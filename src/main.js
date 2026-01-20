@@ -16,7 +16,7 @@ Citations inlined as comments near relevant code
 console.log("hello internet");
 
 const config = {
-    type: Phaser.AUTO,
+    type: Phaser.WEBGL,
     width: 640,
     height: 480,
     useTicker: true,
