@@ -27,6 +27,23 @@ class Play extends Phaser.Scene {
         keyRESET = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+        this.p1Score = 0;
+
+        const scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5
+            },
+            fixedWidth: 100
+        };
+
+        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
     }
 
     update() {
@@ -59,7 +76,7 @@ class Play extends Phaser.Scene {
             && rocket.height + rocket.y > ship.y;
     }
 
-    shipExplode(ship) {
+    ship0Explode(ship) {
         // temporarily hide ship
         ship.alpha = 0;
         // create explosion sprite at ship's position
@@ -70,5 +87,8 @@ class Play extends Phaser.Scene {
             ship.alpha = 1;
             boom.destroy();
         });
+
+        this.p1Score += ship.points;
+        this.scoreLeft.text = this.p1Score;
     }
 }
