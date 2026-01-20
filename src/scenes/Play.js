@@ -44,14 +44,25 @@ class Play extends Phaser.Scene {
         };
 
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
+
+        this.gameOver = false;
+
+        this.clock = this.time.delayedCall(game.settings.gameTimer, this.setGameOver, null, this);
     }
 
     update() {
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyRESET)) {
+            this.scene.restart();
+        }
+
         this.starfield.tilePositionX -= 4;
-        this.p1Rocket.update();
-        this.ship01.update();
-        this.ship02.update();
-        this.ship03.update();
+        
+        if (!this.gameOver) {
+            this.p1Rocket.update();
+            this.ship01.update();
+            this.ship02.update();
+            this.ship03.update();
+        }
 
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship01)) {
@@ -76,7 +87,7 @@ class Play extends Phaser.Scene {
             && rocket.height + rocket.y > ship.y;
     }
 
-    ship0Explode(ship) {
+    shipExplode(ship) {
         // temporarily hide ship
         ship.alpha = 0;
         // create explosion sprite at ship's position
@@ -90,5 +101,28 @@ class Play extends Phaser.Scene {
 
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
+
+        this.sound.play('sfx-explosion');
+    }
+
+    setGameOver() {
+
+        const scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5
+            },
+            fixedWidth: 0
+        };
+
+        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'GAME OVER', scoreConfig).setOrigin(0.5);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.5 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5);
+
+        this.gameOver = true;
     }
 }
