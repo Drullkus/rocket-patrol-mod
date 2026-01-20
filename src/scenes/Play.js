@@ -7,13 +7,7 @@ class Play extends Phaser.Scene {
         // Background
         this.spaceBackground = this.scene.add('spaceBackgroundScene', SpaceBackground, false);
         this.scene.launch('spaceBackgroundScene');
-
-        // Inspired by Factorio https://factorio.com/blog/post/fff-411
-        this.spaceBackground.addLayer('space_dust', 250);
-        this.spaceBackground.addLayer('starfield', 250 * 0.333).scale = 1.5;
-        let distantStars = this.spaceBackground.addLayer('starfield', 250 * 0.125);
-        distantStars.tilePositionY += gameHeight * 0.5;
-        distantStars.setTint(0xAA_AA_AA);
+        this.spaceBackground.configureLayers();
 
         // UI
         this.scoreOverlay = this.scene.add('scoreOverlayScene', ScoreOverlay, false);
