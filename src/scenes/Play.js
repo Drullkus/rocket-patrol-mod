@@ -93,21 +93,7 @@ class Play extends Phaser.Scene {
     }
 
     setGameOver() {
-        const textConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5
-            },
-            fixedWidth: 0
-        };
-
-        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'GAME OVER', textConfig).setOrigin(0.5);
-        this.add.text(gameWidth * 0.5, gameHeight * 0.5 + 64, 'Press (R) to Restart', textConfig).setOrigin(0.5);
+        this.scoreOverlay.showGameOver();
 
         this.gameOver = true;
     }
