@@ -2,7 +2,7 @@
 
 Modification Title:
 
-Time taken to modify: 4 hours (by far)
+Time taken to modify: 5 hours (by far)
 
 Modifications implemented:
   3-Point Tier
@@ -11,16 +11,18 @@ Modifications implemented:
 Citations inlined as comments near relevant code
 */
 
-"use strict";
+'use strict';
 
-console.log("hello internet");
+console.log('hello internet');
 
 const config = {
-    type: Phaser.WEBGL,
-    width: 640,
-    height: 480,
-    useTicker: true,
-    scene: [ Menu, Play ]
+  type: Phaser.WEBGL,
+  width: 800,
+  height: 600,
+  useTicker: true,
+  scene: [ Menu, Play ],
+  parent: 'rocket-patrol',
+  pixelArt: true
 };
 
 const game = new Phaser.Game(config);

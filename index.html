@@ -19,13 +19,20 @@
         <script src="./src/main.js"></script>
         <style>
             body {
-                background-color: beige;
+                background-color: black;
                 display: flex;
                 justify-content: center;
+            }
+
+            .game {
+                border-style: solid;
+                border-width: 100px;
+                border-image: url("./assets/canvas-border.png") 33 stretch;
+                image-rendering: pixelated;
             }
         </style>
     </head>
     <body>
-        
+        <div id="rocket-patrol" class="game"></div>
     </body>
 </html>
