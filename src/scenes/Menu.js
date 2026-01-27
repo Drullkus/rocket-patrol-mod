@@ -23,7 +23,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx-shot', './assets/sfx-shot.wav');
 
         // shader
-        this.load.glsl('noise_revolver', 'assets/noise_revolver.glsl');
+        this.load.glsl('noise_revolver', 'assets/noise_revolver.fsh');
     }
     
     create() {
