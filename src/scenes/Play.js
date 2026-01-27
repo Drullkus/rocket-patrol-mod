@@ -10,20 +10,30 @@ class Play extends Phaser.Scene {
 
         // UI
         this.scoreOverlay = this.scene.add('scoreOverlayScene', ScoreOverlay, false);
-        this.scene.launch('scoreOverlayScene');
 
-        const borderColor = 0xFF_FF_FF; // White
-        // white borders
-        this.add.rectangle(0, 0, gameWidth, borderUISize, borderColor).setOrigin(0, 0); // Top
-        this.add.rectangle(0, gameHeight - borderUISize, gameWidth, borderUISize, borderColor).setOrigin(0, 0); // Bottom
-        this.add.rectangle(0, 0, borderUISize, gameHeight, borderColor).setOrigin(0, 0); // Left
-        this.add.rectangle(gameWidth - borderUISize, 0, borderUISize, gameHeight, borderColor).setOrigin(0, 0); // Right
-
+        // Entities
         this.p1Rocket = new Rocket(this, gameWidth * 0.5, gameHeight - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
 
         this.ship01 = new Spaceship(this, gameWidth + borderUISize * 6, borderUISize * 4 + borderPadding * 0, 'spaceship', 0, 30).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20).setOrigin(0, 0);
         this.ship03 = new Spaceship(this, gameWidth + borderUISize * 0, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10).setOrigin(0, 0);
+        this.scene.launch('scoreOverlayScene');
+
+        const borderColor = 0xAF_4F_00;
+        // Borders
+        this.add.rectangle(0, 0, gameWidth, borderUISize, borderColor).setOrigin(0, 0); // Top
+        this.add.rectangle(0, gameHeight - borderUISize, gameWidth, borderUISize, borderColor).setOrigin(0, 0); // Bottom
+        this.add.rectangle(0, 0, borderUISize, gameHeight, borderColor).setOrigin(0, 0); // Left
+        this.add.rectangle(gameWidth - borderUISize, 0, borderUISize, gameHeight, borderColor).setOrigin(0, 0); // Right
+
+        this.explosionPFX = this.add.particles(0, 0, 'explosion-pfx', {
+            anim: [0, 1, 2, 3].map(index => `explode-${index}`),
+            lifespan: { min: 150, max: 500 },
+            speed: { min: 50, max: 125 },
+            scale: 4,
+            rotate: { start: 0, end: 90 },
+            emitting: false
+        });
 
         keyFIRE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         keyRESET = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -77,13 +87,12 @@ class Play extends Phaser.Scene {
     shipExplode(ship) {
         // temporarily hide ship
         ship.alpha = 0;
-        // create explosion sprite at ship's position
-        const boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
-        boom.anims.play('explode');
-        boom.on('animationcomplete', () => {
+
+        // create explosion particle effects at ship's position
+        this.explosionPFX.emitParticle(10, ship.x + ship.width * 0.5, ship.y + ship.height * 0.5);
+        this.time.delayedCall(500, () => {
             ship.reset();
             ship.alpha = 1;
-            boom.destroy();
         });
 
         this.scoreOverlay.addScore(ship.points);

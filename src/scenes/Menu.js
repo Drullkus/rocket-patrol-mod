@@ -25,6 +25,12 @@ class Menu extends Phaser.Scene {
             startFrame: 0,
             endFrame: 9
         });
+        this.load.spritesheet('explosion-pfx', './assets/explosion-pfx.png', {
+            frameWidth: 16,
+            frameHeight: 16,
+            startFrame: 0,
+            endFrame: 15
+        });
 
         // load audio
         this.load.audio('sfx-select', './assets/sfx-select.wav');
@@ -41,6 +47,13 @@ class Menu extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0 }),
             frameRate: 30
         });
+        [0, 1, 2, 3].forEach(columnIndex => this.anims.create({
+            key: `explode-${columnIndex}`,
+            frames: this.anims.generateFrameNumbers(`explosion-pfx`, {
+                frames: [4, 0, 4, 8, 12].map(rowIndex => rowIndex + columnIndex)
+            }),
+            frameRate: 15
+        }));
 
         let menuConfig = {
             fontFamily: 'Courier',
