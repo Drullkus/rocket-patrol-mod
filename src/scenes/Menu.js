@@ -1,6 +1,15 @@
 class Menu extends Phaser.Scene {
-    constructor() {
+    constructor(queryMode) {
         super("menuScene");
+
+        if (queryMode == 'novice') {
+            this.postCreate = this.setNovice;
+        } else if (queryMode == 'expert') {
+            this.postCreate = this.setExpert;
+        } else {
+            this.postCreate = () => {};
+        }
+
     }
 
     preload() {
@@ -54,25 +63,37 @@ class Menu extends Phaser.Scene {
 
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+        this.postCreate();
     }
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-            game.settings = {
-                rocketSpeed: 125,
-                spaceshipSpeed: 185,
-                gameTimer: 60000
-            };
             this.sound.play('sfx-select');
-            this.scene.start('playScene');
+            setNovice();
         } else if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-            game.settings = {
-                rocketSpeed: 125,
-                spaceshipSpeed: 250,
-                gameTimer: 45000
-            };
             this.sound.play('sfx-select');
-            this.scene.start('playScene');
+            setExpert();
         }
+    }
+
+    setNovice() {
+        game.settings = {
+            rocketSpeed: 125,
+            spaceshipSpeed: 185,
+            gameTimer: 60000
+        };
+
+        this.scene.start('playScene');
+    }
+
+    setExpert() {
+        game.settings = {
+            rocketSpeed: 125,
+            spaceshipSpeed: 250,
+            gameTimer: 45000
+        };
+
+        this.scene.start('playScene');
     }
 }

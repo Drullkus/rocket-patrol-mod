@@ -15,22 +15,23 @@ Citations inlined as comments near relevant code
 
 console.log('hello internet');
 
+const urlQueryParams = new URLSearchParams(window.location.search);
+
 const config = {
   type: Phaser.WEBGL,
   width: 800,
   height: 600,
   useTicker: true,
-  scene: [ Menu, Play ],
+  scene: [ new Menu(urlQueryParams.get('mode')), Play ],
   parent: 'rocket-patrol',
   pixelArt: true
 };
 
 const game = new Phaser.Game(config);
 
-const gameWidth = game.config.width;
-const gameHeight = game.config.height;
+const { height: gameHeight, width: gameWidth } = game.config;
 
-const borderUISize = game.config.width / 15;
-const borderPadding = game.config.height / 45;
+const borderUISize = gameWidth / 15;
+const borderPadding = gameHeight / 45;
 
 var keyFIRE, keyRESET, keyLEFT, keyRIGHT;
