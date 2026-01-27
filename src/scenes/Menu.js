@@ -19,12 +19,6 @@ class Menu extends Phaser.Scene {
         this.load.image('starfield', './assets/starfield.png');
         this.load.image('space_dust', './assets/space_dust.png');
         this.load.image('star_streaks', './assets/star_streaks.png');
-        this.load.spritesheet('explosion', './assets/explosion.png', {
-            frameWidth: 64,
-            frameHeight: 32,
-            startFrame: 0,
-            endFrame: 9
-        });
         this.load.spritesheet('explosion-pfx', './assets/explosion-pfx.png', {
             frameWidth: 16,
             frameHeight: 16,
@@ -42,11 +36,6 @@ class Menu extends Phaser.Scene {
     }
     
     create() {
-        this.anims.create({
-            key: 'explode',
-            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0 }),
-            frameRate: 30
-        });
         [0, 1, 2, 3].forEach(columnIndex => this.anims.create({
             key: `explode-${columnIndex}`,
             frames: this.anims.generateFrameNumbers(`explosion-pfx`, {

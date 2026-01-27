@@ -1,16 +1,6 @@
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
-
-        this.pointsTextConfig = {
-            fontFamily: 'Courier',
-            fontSize: '24px',
-            color: '#F3B141',
-            align: 'center'
-        };
-        // There appear to be no information online about making text-based particles;
-        // they shall be objects and animated in this array!
-        this.pointsFloatingText = [];
     }
     
     create() {
@@ -63,10 +53,6 @@ class Play extends Phaser.Scene {
         }
 
         const deltaSeconds = deltaMillis * 0.001;
-
-        this.pointsFloatingText.forEach(text => {
-            text.y -= deltaSeconds * 50;
-        });
         
         if (!this.gameOver) {
             this.p1Rocket.update(deltaSeconds);
@@ -102,15 +88,7 @@ class Play extends Phaser.Scene {
         const centerX = ship.x + ship.width * 0.5;
         const centerY = ship.y + ship.height * 0.5;
 
-        // text floating upwards
-        const text = this.add.text(centerX, centerY - 10, `+${ship.points}`, this.pointsTextConfig);
-        this.pointsFloatingText.push(text);
-        this.time.delayedCall(250, () => {
-            removeArrayElement(this.pointsFloatingText, text);
-        });
-        this.time.delayedCall(750, () => {
-            text.destroy();
-        });
+        this.scoreOverlay.awardPoints(centerX, centerY, ship.points);
 
         // temporarily hide ship
         ship.alpha = 0;
@@ -122,10 +100,6 @@ class Play extends Phaser.Scene {
             ship.alpha = 1;
         });
 
-        this.scoreOverlay.addScore(ship.points);
-
-        console.log(`Awarded ${ship.points} points`); // TODO replace with score number rising up
-
         this.sound.play('sfx-explosion');
     }
 
@@ -133,13 +107,5 @@ class Play extends Phaser.Scene {
         this.scoreOverlay.showGameOver();
 
         this.gameOver = true;
-    }
-}
-
-function removeArrayElement(list, element) {
-    // Remove element from array: https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array-in-javascript
-    const index = list.indexOf(element);
-    if (index >= 0) {
-        list.splice(index, 1);
     }
 }
