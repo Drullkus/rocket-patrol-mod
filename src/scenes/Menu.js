@@ -3,9 +3,9 @@ class Menu extends Phaser.Scene {
         super("menuScene");
 
         if (queryMode == 'novice') {
-            this.postCreate = this.setNovice;
+            this.postCreate = this.startNovice;
         } else if (queryMode == 'expert') {
-            this.postCreate = this.setExpert;
+            this.postCreate = this.startExpert;
         } else {
             this.postCreate = () => {};
         }
@@ -72,15 +72,16 @@ class Menu extends Phaser.Scene {
     update() {
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.sound.play('sfx-select');
-            this.setNovice();
+            this.startNovice();
         } else if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             this.sound.play('sfx-select');
-            this.setExpert();
+            this.startExpert();
         }
     }
 
-    setNovice() {
+    startNovice() {
         game.settings = {
+            gameMode: 'novice',
             rocketSpeed: 125,
             spaceshipSpeed: 185,
             gameTimer: 60000
@@ -89,8 +90,9 @@ class Menu extends Phaser.Scene {
         this.scene.start('playScene');
     }
 
-    setExpert() {
+    startExpert() {
         game.settings = {
+            gameMode: 'expert',
             rocketSpeed: 125,
             spaceshipSpeed: 250,
             gameTimer: 45000

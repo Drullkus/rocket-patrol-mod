@@ -1,8 +1,6 @@
-class ScoreOverlay extends Phaser.Scene {
+class GuiOverlay extends Phaser.Scene {
     constructor() {
-        super('scoreOverlayScene');
-
-        this.p1Score = 0;
+        super('guiOverlayScene');
 
         this.pointsTextConfig = {
             fontFamily: 'Courier',
@@ -15,19 +13,15 @@ class ScoreOverlay extends Phaser.Scene {
         this.pointsFloatingText = [];
     }
 
-    addScore(scored) {
-        this.p1Score += scored;
-        this.playerScore.text = this.p1Score;
-    }
-
     create() {
-        this.add.rectangle(0, borderUISize + borderPadding, gameWidth, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
+        this.p1Score = 0;
+        this.highScore = localStorage.getItem('highScore') ?? 0;
 
         const scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
+            backgroundColor: '#00FF00',
+            color: '#008800',
             align: 'right',
             padding: {
                 top: 5,
@@ -36,7 +30,8 @@ class ScoreOverlay extends Phaser.Scene {
             fixedWidth: 100
         };
 
-        this.playerScore = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
+        this.p1ScoreObj = this.add.text(borderUISize + borderPadding, borderUISize, this.p1Score, scoreConfig).setOrigin(0, 0.5);
+        this.highScoreObj = this.add.text(gameWidth - borderUISize - borderPadding, borderUISize, this.highScore, scoreConfig).setOrigin(1, 0.5);
     }
 
     update(_time, deltaMillis) {
@@ -47,7 +42,7 @@ class ScoreOverlay extends Phaser.Scene {
         });
     }
 
-    showGameOver() {
+    setGameOver() {
         const textConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
@@ -63,6 +58,24 @@ class ScoreOverlay extends Phaser.Scene {
 
         this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'GAME OVER', textConfig).setOrigin(0.5);
         this.add.text(gameWidth * 0.5, gameHeight * 0.5 + 64, 'Press (R) to Restart', textConfig).setOrigin(0.5);
+
+        if (this.p1Score > this.highScore) {
+            this.add.text(gameWidth * 0.5, gameHeight * 0.5 - 64, 'NEW HIGHSCORE', textConfig).setOrigin(0.5);
+            
+            this.setHighScore(this.p1Score);
+        }
+    }
+
+    addScore(points) {
+        this.p1Score += points;
+        this.p1ScoreObj.text = this.p1Score;
+    }
+
+    setHighScore(score) {
+        this.highScore = score;
+        this.highScoreObj.text = this.highScore;
+
+        localStorage.setItem('highScore', this.highScore);
     }
 
     awardPoints(centerX, centerY, points) {

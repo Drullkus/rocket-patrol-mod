@@ -9,7 +9,8 @@ class Play extends Phaser.Scene {
         this.scene.launch('spaceBackgroundScene');
 
         // UI
-        this.scoreOverlay = this.scene.add('scoreOverlayScene', ScoreOverlay, false);
+        this.scoreOverlay = this.scene.add('guiOverlayScene', GuiOverlay, false);
+        this.scene.launch('guiOverlayScene');
 
         // Entities
         this.p1Rocket = new Rocket(this, gameWidth * 0.5, gameHeight - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
@@ -17,14 +18,6 @@ class Play extends Phaser.Scene {
         this.ship01 = new Spaceship(this, gameWidth + borderUISize * 6, borderUISize * 4 + borderPadding * 0, 'spaceship', 0, 30).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20).setOrigin(0, 0);
         this.ship03 = new Spaceship(this, gameWidth + borderUISize * 0, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10).setOrigin(0, 0);
-        this.scene.launch('scoreOverlayScene');
-
-        const borderColor = 0xAF_4F_00;
-        // Borders
-        this.add.rectangle(0, 0, gameWidth, borderUISize, borderColor).setOrigin(0, 0); // Top
-        this.add.rectangle(0, gameHeight - borderUISize, gameWidth, borderUISize, borderColor).setOrigin(0, 0); // Bottom
-        this.add.rectangle(0, 0, borderUISize, gameHeight, borderColor).setOrigin(0, 0); // Left
-        this.add.rectangle(gameWidth - borderUISize, 0, borderUISize, gameHeight, borderColor).setOrigin(0, 0); // Right
 
         this.explosionPFX = this.add.particles(0, 0, 'explosion-pfx', {
             anim: [0, 1, 2, 3].map(index => `explode-${index}`),
@@ -34,6 +27,19 @@ class Play extends Phaser.Scene {
             rotate: { start: 0, end: 90 },
             emitting: false
         });
+
+        { // Stays in here instead of GuiOverlay so that Space can draw over the borders and spaceships don't
+            // Border numbers
+            const borderColor = 0xAF_4F_00;
+            const topYEdge = borderUISize * 2; // Make top border twice as thick to fit GUI numbers
+            const bottomYEdge = gameHeight - topYEdge - borderUISize;
+
+            // Borders
+            this.add.rectangle(0, 0, gameWidth, topYEdge, borderColor).setOrigin(0, 0); // Top
+            this.add.rectangle(0, gameHeight - borderUISize, gameWidth, borderUISize, borderColor).setOrigin(0, 0); // Bottom
+            this.add.rectangle(0, topYEdge, borderUISize, bottomYEdge, borderColor).setOrigin(0, 0); // Left
+            this.add.rectangle(gameWidth - borderUISize, topYEdge, borderUISize, bottomYEdge, borderColor).setOrigin(0, 0); // Right
+        }
 
         keyFIRE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         keyRESET = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -48,7 +54,7 @@ class Play extends Phaser.Scene {
     update(_time, deltaMillis) {
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyRESET)) {
             this.scene.remove('spaceBackgroundScene');
-            this.scene.remove('scoreOverlayScene');
+            this.scene.remove('guiOverlayScene');
             this.scene.restart();
         }
 
@@ -104,7 +110,7 @@ class Play extends Phaser.Scene {
     }
 
     setGameOver() {
-        this.scoreOverlay.showGameOver();
+        this.scoreOverlay.setGameOver();
 
         this.gameOver = true;
     }
