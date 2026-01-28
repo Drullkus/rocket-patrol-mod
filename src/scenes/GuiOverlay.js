@@ -14,9 +14,6 @@ class GuiOverlay extends Phaser.Scene {
     }
 
     create() {
-        this.p1Score = 0;
-        this.highScore = localStorage.getItem('highScore') ?? 0;
-
         const scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
@@ -30,16 +27,22 @@ class GuiOverlay extends Phaser.Scene {
             fixedWidth: 100
         };
 
+        this.p1Score = 0;
         this.p1ScoreObj = this.add.text(borderUISize + borderPadding, borderUISize, this.p1Score, scoreConfig).setOrigin(0, 0.5);
-        this.highScoreObj = this.add.text(gameWidth - borderUISize - borderPadding, borderUISize, this.highScore, scoreConfig).setOrigin(1, 0.5);
+
+        this.highScoreObj = this.add.text(gameWidth - borderUISize - borderPadding, borderUISize, getHighScore(), scoreConfig).setOrigin(1, 0.5);
     }
 
-    update(_time, deltaMillis) {
+    update(time, deltaMillis) {
         const deltaSeconds = deltaMillis * 0.001;
 
-        this.pointsFloatingText.forEach(text => {
-            text.y -= deltaSeconds * 50;
-        });
+        this.pointsFloatingText.forEach(text => text.y -= deltaSeconds * 50 );
+
+        if (this.highScoreText) {
+            const colorHex = huetoHexCode(time * 0.00067);
+            this.highScoreText.setColor(colorHex);
+            this.highScoreObj.setBackgroundColor(colorHex);
+        }
     }
 
     setGameOver() {
@@ -59,23 +62,27 @@ class GuiOverlay extends Phaser.Scene {
         this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'GAME OVER', textConfig).setOrigin(0.5);
         this.add.text(gameWidth * 0.5, gameHeight * 0.5 + 64, 'Press (R) to Restart', textConfig).setOrigin(0.5);
 
-        if (this.p1Score > this.highScore) {
-            this.add.text(gameWidth * 0.5, gameHeight * 0.5 - 64, 'NEW HIGHSCORE', textConfig).setOrigin(0.5);
+        if (this.p1Score > getHighScore()) {
+            const highScoreConfig = {
+                fontFamily: 'Courier',
+                fontSize: '80px',
+                color: '#FFF',
+                align: 'center'
+            };
+            this.highScoreText = this.add.text(gameWidth * 0.5, gameHeight * 0.5 - 64, 'NEW HIGH SCORE', highScoreConfig);
+            this.highScoreText.setOrigin(0.5);
+            this.highScoreText.setStroke('#000', 16);
             
-            this.setHighScore(this.p1Score);
+            saveHighScore(this.p1Score);
+            this.highScoreObj.text = this.p1Score;
+            this.highScoreObj.setStroke('#000', 5);
+            this.highScoreObj.setColor('#FFF');
         }
     }
 
     addScore(points) {
         this.p1Score += points;
         this.p1ScoreObj.text = this.p1Score;
-    }
-
-    setHighScore(score) {
-        this.highScore = score;
-        this.highScoreObj.text = this.highScore;
-
-        localStorage.setItem('highScore', this.highScore);
     }
 
     awardPoints(centerX, centerY, points) {
@@ -86,13 +93,5 @@ class GuiOverlay extends Phaser.Scene {
         this.pointsFloatingText.push(text);
         this.time.delayedCall(250, () => removeArrayElement(this.pointsFloatingText, text));
         this.time.delayedCall(750, () => text.destroy());
-    }
-}
-
-function removeArrayElement(list, element) {
-    // Remove element from array: https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array-in-javascript
-    const index = list.indexOf(element);
-    if (index >= 0) {
-        list.splice(index, 1);
     }
 }

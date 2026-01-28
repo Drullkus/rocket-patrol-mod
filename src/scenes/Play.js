@@ -12,15 +12,9 @@ class Play extends Phaser.Scene {
         this.scoreOverlay = this.scene.add('guiOverlayScene', GuiOverlay, false);
         this.scene.launch('guiOverlayScene');
 
-        // Entities
-        this.p1Rocket = new Rocket(this, gameWidth * 0.5, gameHeight - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
-
-        this.ship01 = new Spaceship(this, gameWidth + borderUISize * 6, borderUISize * 4 + borderPadding * 0, 'spaceship', 0, 30).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, gameWidth + borderUISize * 0, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10).setOrigin(0, 0);
-
-        this.explosionPFX = this.add.particles(0, 0, 'explosion-pfx', {
-            anim: [0, 1, 2, 3].map(index => `explode-${index}`),
+        // Green explosion for ships
+        this.explosionGreen = this.add.particles(0, 0, `explosion-green`, {
+            anim: [0, 1, 2, 3].map(index => `explode-${index}-green`),
             lifespan: { min: 150, max: 500 },
             speed: { min: 50, max: 125 },
             scale: 4,
@@ -28,7 +22,24 @@ class Play extends Phaser.Scene {
             emitting: false
         });
 
-        { // Stays in here instead of GuiOverlay so that Space can draw over the borders and spaceships don't
+        // Smaller explosion for rocket
+        this.explosion = this.add.particles(0, 0, `explosion`, {
+            anim: [0, 1, 2, 3].map(index => `explode-${index}`),
+            lifespan: { min: 150, max: 300 }, // Expires slightly sooner
+            speed: { min: 10, max: 50 }, // Less spread
+            scale: 2,
+            rotate: { start: 0, end: 45 },
+            emitting: false
+        });
+
+        // Entities
+        this.p1Rocket = new Rocket(this, gameWidth * 0.5, gameHeight - borderUISize - borderPadding, 'rocket', null, this.explosion).setOrigin(0.5, 0);
+
+        this.ship01 = new Spaceship(this, gameWidth + borderUISize * 6, borderUISize * 4 + borderPadding * 0, 'spaceship', 0, 30, this.explosionGreen).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20, this.explosionGreen).setOrigin(0, 0);
+        this.ship03 = new Spaceship(this, gameWidth + borderUISize * 0, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10, this.explosionGreen).setOrigin(0, 0);
+
+        { // Stays in here instead of GuiOverlay so that Space can draw over the borders and spaceships under borders
             // Border numbers
             const borderColor = 0xAF_4F_00;
             const topYEdge = borderUISize * 2; // Make top border twice as thick to fit GUI numbers
@@ -69,16 +80,16 @@ class Play extends Phaser.Scene {
 
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship01)) {
-            this.p1Rocket.reset();
-            this.shipExplode(this.ship01);
+            this.p1Rocket.explode();
+            this.ship01.explode();
         };
         if(this.checkCollision(this.p1Rocket, this.ship02)) {
-            this.p1Rocket.reset();
-            this.shipExplode(this.ship02);
+            this.p1Rocket.explode();
+            this.ship02.explode();
         };
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
-            this.p1Rocket.reset();
-            this.shipExplode(this.ship03);
+            this.p1Rocket.explode();
+            this.ship03.explode();
         };
     }
 
@@ -88,25 +99,6 @@ class Play extends Phaser.Scene {
             && rocket.x + rocket.width > ship.x
             && rocket.y < ship.y + ship.height
             && rocket.height + rocket.y > ship.y;
-    }
-
-    shipExplode(ship) {
-        const centerX = ship.x + ship.width * 0.5;
-        const centerY = ship.y + ship.height * 0.5;
-
-        this.scoreOverlay.awardPoints(centerX, centerY, ship.points);
-
-        // temporarily hide ship
-        ship.alpha = 0;
-
-        // create explosion particle effects at ship's position
-        this.explosionPFX.emitParticle(10, centerX, centerY);
-        this.time.delayedCall(500, () => {
-            ship.reset();
-            ship.alpha = 1;
-        });
-
-        this.sound.play('sfx-explosion');
     }
 
     setGameOver() {

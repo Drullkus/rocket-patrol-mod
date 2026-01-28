@@ -2,12 +2,13 @@ class Menu extends Phaser.Scene {
     constructor(queryMode) {
         super("menuScene");
 
-        if (queryMode == 'novice') {
+        // Dev feature to instantly enter a game mode by url parameter
+        if (queryMode === 'novice') {
             this.postCreate = this.startNovice;
-        } else if (queryMode == 'expert') {
+        } else if (queryMode === 'expert') {
             this.postCreate = this.startExpert;
         } else {
-            this.postCreate = () => {};
+            this.postCreate = () => {}; // Allow scene to enter update loop
         }
 
     }
@@ -19,12 +20,10 @@ class Menu extends Phaser.Scene {
         this.load.image('starfield', './assets/starfield.png');
         this.load.image('space_dust', './assets/space_dust.png');
         this.load.image('star_streaks', './assets/star_streaks.png');
-        this.load.spritesheet('explosion-pfx', './assets/explosion-pfx.png', {
-            frameWidth: 16,
-            frameHeight: 16,
-            startFrame: 0,
-            endFrame: 15
-        });
+
+        const explosionAnimationConfig = { frameWidth: 16, frameHeight: 16, startFrame: 0, endFrame: 15 };
+        this.load.spritesheet('explosion', './assets/explosion.png', explosionAnimationConfig);
+        this.load.spritesheet('explosion-green', './assets/explosion-green.png', explosionAnimationConfig);
 
         // load audio
         this.load.audio('sfx-select', './assets/sfx-select.wav');
@@ -36,13 +35,16 @@ class Menu extends Phaser.Scene {
     }
     
     create() {
-        [0, 1, 2, 3].forEach(columnIndex => this.anims.create({
-            key: `explode-${columnIndex}`,
-            frames: this.anims.generateFrameNumbers(`explosion-pfx`, {
-                frames: [4, 0, 4, 8, 12].map(rowIndex => rowIndex + columnIndex)
-            }),
-            frameRate: 15
-        }));
+        ['', '-green'].forEach(suffix => 
+            // 4 columns of animation sequences
+            [0, 1, 2, 3].forEach((columnIndex, _index, list) => this.anims.create({
+                key: `explode-${columnIndex}${suffix}`,
+                frames: this.anims.generateFrameNumbers(`explosion${suffix}`, {
+                    frames: [1, 0, 1, 2, 3].map(rowIndex => rowIndex * list.length + columnIndex)
+                }),
+                frameRate: 15
+            }))
+        );
 
         let menuConfig = {
             fontFamily: 'Courier',
