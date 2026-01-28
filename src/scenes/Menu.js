@@ -72,10 +72,10 @@ class Menu extends Phaser.Scene {
     update() {
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.sound.play('sfx-select');
-            setNovice();
+            this.setNovice();
         } else if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             this.sound.play('sfx-select');
-            setExpert();
+            this.setExpert();
         }
     }
 
