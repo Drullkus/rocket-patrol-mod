@@ -2,11 +2,15 @@
 
 Modification Title:
 
-Time taken to modify: 5 hours (by far)
+Time taken to modify: 8 hours (by far)
 
 Modifications implemented:
+  1-Point Tier
+  - Create a new scrolling tile sprite for the background
   3-Point Tier
   - Implement parallax scrolling for the background
+  5-Point Tier
+  - Use Phaser's particle emitter to create a particle explosion when the rocket hits the spaceship
 
 Citations inlined as comments near relevant code
 */
