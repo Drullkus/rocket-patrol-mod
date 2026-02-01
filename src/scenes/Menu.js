@@ -40,6 +40,22 @@ class Menu extends Phaser.Scene {
     }
     
     create() {
+        this.createAnimations();
+
+        this.mode = 0.5;
+        this.modeSpeed = 0.015; // Higher values = less time to hold to enter one of the game modes
+
+        this.createMenuBackground();
+
+        this.createMenuUi();
+
+        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+        this.postCreate();
+    }
+
+    createAnimations() {
         ['', '-green'].forEach(suffix =>
             // 4 columns of animation sequences
             [0, 1, 2, 3].forEach((columnIndex, _index, list) => this.anims.create({
@@ -57,23 +73,6 @@ class Menu extends Phaser.Scene {
             repeat: -1,
             frameRate: 10
         }));
-
-        this.mode = 0.5;
-        this.modeSpeed = 0.015; // Higher values = less time to hold to enter one of the game modes
-
-        this.galaxy = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'galaxy').setOrigin(0).setAlpha(0.75);
-        this.galaxy.tilePositionX = 200;
-        this.galaxy.flipX = true;
-
-        this.noviceBar = this.add.rectangle(0, gameHeight, gameWidth, gameHeight * 0.05, 0xF3B141).setOrigin(0, 1);
-        this.expertBar = this.add.rectangle(gameWidth, gameHeight, gameWidth, gameHeight * 0.05, 0x00FF00).setOrigin(1, 1);
-
-        this.setMenuText();
-
-        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-
-        this.postCreate();
     }
 
     update() {
@@ -86,6 +85,8 @@ class Menu extends Phaser.Scene {
         }
 
         this.galaxy.tilePositionX = (1 - this.mode) * 400;
+        this.distantStars.tilePositionX = this.mode * 425;
+        this.stars.tilePositionX = this.mode * 350;
 
         this.noviceBar.scaleX = 1 - (2 * this.mode);
         this.expertBar.scaleX = 1 - (2 * (1 - this.mode));
@@ -99,7 +100,25 @@ class Menu extends Phaser.Scene {
         }
     }
 
-    setMenuText() {
+    createMenuBackground() {
+        this.galaxy = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'galaxy').setOrigin(0).setAlpha(0.75);
+        this.galaxy.tilePositionX = 200;
+        this.galaxy.flipX = true;
+
+        this.stars = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield').setOrigin(0);
+        this.stars.scale = 1.5;
+        this.stars.setBlendMode('SCREEN');
+
+        this.distantStars = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield').setOrigin(0);
+        this.distantStars.tilePositionY += gameHeight * 0.5;
+        this.distantStars.setTint(0x88_AA_CC);
+        this.distantStars.setBlendMode('SCREEN');
+    }
+
+    createMenuUi() {
+        this.noviceBar = this.add.rectangle(0, gameHeight, gameWidth, gameHeight * 0.05, 0xF3B141).setOrigin(0, 1);
+        this.expertBar = this.add.rectangle(gameWidth, gameHeight, gameWidth, gameHeight * 0.05, 0x00FF00).setOrigin(1, 1);
+
         const menuConfig = {
             fontFamily: 'xirod',
             fontSize: '26px',
