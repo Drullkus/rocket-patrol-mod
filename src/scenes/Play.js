@@ -107,6 +107,8 @@ class Play extends Phaser.Scene {
     }
 
     setGameOver() {
+        this.spaceBackground.scrolling = false;
+
         this.scoreOverlay.setGameOver();
 
         this.gameOver = true;

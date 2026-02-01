@@ -14,11 +14,15 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
+        // load font
+        this.load.font('xirod', './assets/xirod.otf', 'opentype'); // Obtained from https://www.1001fonts.com/xirod-font.html
+
         // load images/tile sprites
+        this.load.image('galaxy', './assets/galaxy.png');
         this.load.image('rocket', './assets/rocket.png');
         this.load.spritesheet('spaceship', './assets/spaceship.png', { frameWidth: 64, frameHeight: 32 });
-        this.load.image('starfield', './assets/starfield.png');
         this.load.image('space_dust', './assets/space_dust.png');
+        this.load.image('starfield', './assets/starfield.png');
         this.load.image('star_streaks', './assets/star_streaks.png');
 
         const explosionAnimationConfig = { frameWidth: 16, frameHeight: 16, startFrame: 0, endFrame: 15 };
@@ -53,11 +57,19 @@ class Menu extends Phaser.Scene {
             frameRate: 10
         })
 
+        this.mode = 0.5;
+        this.modeSpeed = 0.015; // Higher values = less time to hold to enter one of the game modes
+
+        this.galaxy = this.add.tileSprite(gameWidth, 0, -gameWidth, gameHeight, 'galaxy').setOrigin(0).setAlpha(0.75);
+        this.galaxy.tilePositionX = 200;
+
+        this.noviceBar = this.add.rectangle(0, gameHeight, gameWidth, gameHeight * 0.05, 0xF3B141).setOrigin(0, 1);
+        this.expertBar = this.add.rectangle(gameWidth, gameHeight, gameWidth, gameHeight * 0.05, 0x00FF00).setOrigin(1, 1);
+
         const menuConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
+            fontFamily: 'xirod',
+            fontSize: '26px',
+            color: '#F3B141',
             align: 'right',
             padding: {
                 top: 5,
@@ -66,11 +78,13 @@ class Menu extends Phaser.Scene {
             fixedWidth: 0
         };
         // display menu text
-        this.add.text(gameWidth * 0.5, gameHeight * 0.5 - borderUISize - borderPadding, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
-        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'Use ←→ arrows to move & (F) to fire', menuConfig).setOrigin(0.5);
-        menuConfig.backgroundColor = '#00FF00';
-        menuConfig.color = '#000';
-        this.add.text(gameWidth * 0.5, gameHeight * 0.5 + borderUISize + borderPadding, 'Press ← for Novice or → for Expert', menuConfig).setOrigin(0.5);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.5 - borderUISize - borderPadding * 4, 'ROCKET TERMINAL', menuConfig).setOrigin(0.5);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'Use ←→ arrows to move', menuConfig).setOrigin(0.5, 1);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'and (F) to fire', menuConfig).setOrigin(0.5, 0);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.5 + borderUISize + borderPadding * 4, 'Hold ← for Novice or → for Expert', {
+            ...menuConfig,
+            color: '#00FF00'
+        }).setOrigin(0.5);
 
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -79,10 +93,23 @@ class Menu extends Phaser.Scene {
     }
 
     update() {
-        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+        if (keyLEFT.isDown) {
+            this.mode = Math.max(this.mode - this.modeSpeed, 0);
+        } else if (keyRIGHT.isDown) {
+            this.mode = Math.min(this.mode + this.modeSpeed, 1);
+        } else {
+            this.mode = Phaser.Math.Linear(this.mode, 0.5, 0.1);
+        }
+
+        this.galaxy.tilePositionX = this.mode * 400;
+
+        this.noviceBar.scaleX = 1 - (2 * this.mode);
+        this.expertBar.scaleX = 1 - (2 * (1 - this.mode));
+
+        if (this.mode === 0) {
             this.sound.play('sfx-select');
             this.startNovice();
-        } else if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
+        } else if (this.mode === 1) {
             this.sound.play('sfx-select');
             this.startExpert();
         }

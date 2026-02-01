@@ -3,7 +3,7 @@ class GuiOverlay extends Phaser.Scene {
         super('guiOverlayScene');
 
         this.pointsTextConfig = {
-            fontFamily: 'Courier',
+            fontFamily: 'Courier New',
             fontSize: '24px',
             color: '#F3B141',
             align: 'center'
@@ -18,7 +18,7 @@ class GuiOverlay extends Phaser.Scene {
         this.clock = data.clock;
         
         const scoreConfig = {
-            fontFamily: 'Courier',
+            fontFamily: 'xirod',
             fontSize: '28px',
             align: 'right',
             padding: {
@@ -58,7 +58,7 @@ class GuiOverlay extends Phaser.Scene {
             ...scoreConfig,
             ...orangeText,
             align: 'center',
-            fixedWidth: 50
+            fixedWidth: 75
         }).setOrigin(0.5);
     }
 
@@ -78,13 +78,13 @@ class GuiOverlay extends Phaser.Scene {
         if (this.flashTimer) {
             const showStroke = (Math.round(secondsRemaining * 2) % 2) === 0;
             
-            this.timerObj.setStroke('#FFF', showStroke ? 6 : 0);
+            this.timerObj.setStroke('#FFF', showStroke ? 4 : 0);
         }
     }
 
     setGameOver() {
         const textConfig = {
-            fontFamily: 'Courier',
+            fontFamily: 'xirod',
             fontSize: '28px',
             backgroundColor: '#F3B141',
             color: '#843605',
@@ -101,8 +101,8 @@ class GuiOverlay extends Phaser.Scene {
 
         if (this.p1Score > getHighScore()) {
             const highScoreConfig = {
-                fontFamily: 'Courier',
-                fontSize: '80px',
+                fontFamily: 'xirod',
+                fontSize: '54px',
                 color: '#FFF',
                 align: 'center'
             };

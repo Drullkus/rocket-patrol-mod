@@ -6,17 +6,24 @@ class SpaceBackground extends Phaser.Scene {
     }
 
     create() {
-        // Inspired by Factorio https://factorio.com/blog/post/fff-411
-        this.addLayer('space_dust', 250);
+        this.scrolling = true;
 
-        const spaceClouds = this.addLayer('space_dust', 250 * 0.2);
+        // Inspired by Factorio https://factorio.com/blog/post/fff-411
+        const galaxy = this.addLayer('galaxy', 5);
+        galaxy.tilePositionX += 400;
+        galaxy.setAlpha(0.333);
+
+        this.addLayer('space_dust', 100).setAlpha(0.333);
+
+        const spaceClouds = this.addLayer('space_dust', 20);
         spaceClouds.tilePositionY += gameHeight * 0.5;
         spaceClouds.scale = 4;
         spaceClouds.setTint(0xFF_EE_DD);
+        spaceClouds.setAlpha(0.333);
 
-        this.addLayer('starfield', 250 * 0.333).scale = 1.5;
+        this.addLayer('starfield', 20).scale = 1.5;
 
-        const distantStars = this.addLayer('starfield', 250 * 0.125);
+        const distantStars = this.addLayer('starfield', 10);
         distantStars.tilePositionY += gameHeight * 0.5;
         distantStars.setTint(0x88_AA_CC);
 
@@ -31,6 +38,10 @@ class SpaceBackground extends Phaser.Scene {
     }
 
     update(_time, deltaMillis) {
+        if (!this.scrolling) {
+            return;
+        }
+
         const deltaSeconds = deltaMillis * 0.001;
 
         this.imageLayers.forEach(({pixelsPerSecond, layer}) => {
