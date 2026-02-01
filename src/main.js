@@ -13,6 +13,7 @@ Turn-in Modifications implemented:
     > High scores in storage separated by game mode
   - Implement the 'FIRE' UI text from the original game
     > Added in GuiOverlay
+  - Implement the speed increase that happens after 30 seconds in the original game
   3-Point Tier
   - Implement parallax scrolling for the background
     > 5 layers in SpaceBackground.js [ space dust, space dust, starfield, starfield, star streaks shader ]
@@ -26,7 +27,6 @@ Turn-in Modifications implemented:
 
 TODO
   1-Point Tier
-  - Implement the speed increase that happens after 30 seconds in the original game
   - Allow the player to control the Rocket after it's fired
   3-Point Tier
   - Create a new title screen (e.g., new artwork, typography, layout)

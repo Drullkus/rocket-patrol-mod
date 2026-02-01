@@ -14,6 +14,7 @@ class GuiOverlay extends Phaser.Scene {
     }
 
     create(data) {
+        this.flashTimer = false;
         this.clock = data.clock;
         
         const scoreConfig = {
@@ -32,8 +33,7 @@ class GuiOverlay extends Phaser.Scene {
             color: '#008800'
         }
         const orangeText = {
-            backgroundColor: '#F3B141',
-            color: '#843605'
+            color: '#F3B141'
         }
 
         this.p1Score = 0;
@@ -73,7 +73,13 @@ class GuiOverlay extends Phaser.Scene {
             this.highScoreObj.setBackgroundColor(colorHex);
         }
 
-        this.timerObj.text = Math.ceil(this.clock.getRemaining() * 0.001);
+        const secondsRemaining = this.clock.getRemaining() * 0.001;
+        this.timerObj.text = Math.ceil(secondsRemaining);
+        if (this.flashTimer) {
+            const showStroke = (Math.round(secondsRemaining * 2) % 2) === 0;
+            
+            this.timerObj.setStroke('#FFF', showStroke ? 6 : 0);
+        }
     }
 
     setGameOver() {
@@ -109,6 +115,8 @@ class GuiOverlay extends Phaser.Scene {
             this.highScoreObj.setStroke('#000', 5);
             this.highScoreObj.setColor('#FFF');
         }
+
+        this.setTimerFlashing(false);
     }
 
     addScore(points) {
@@ -128,5 +136,12 @@ class GuiOverlay extends Phaser.Scene {
 
     setShowFire(show) {
         this.fireObj.setVisible(show);
+    }
+    
+    setTimerFlashing(state) {
+        this.flashTimer = state;
+        if (!state) {
+            this.timerObj.setStroke('#FFF', 0);
+        }
     }
 }

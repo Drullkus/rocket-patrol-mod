@@ -5,6 +5,7 @@ class Play extends Phaser.Scene {
     
     create() {
         this.clock = this.time.delayedCall(game.settings.gameTimer, this.setGameOver, null, this);
+        this.time.delayedCall(30000, this.accelerateShips, null, this);
         
         // Background
         this.spaceBackground = this.scene.add('spaceBackgroundScene', SpaceBackground, false);
@@ -37,9 +38,11 @@ class Play extends Phaser.Scene {
         // Entities
         this.p1Rocket = new Rocket(this, gameWidth * 0.5, gameHeight - borderUISize - borderPadding, 'rocket', null, this.explosion).setOrigin(0.5, 0);
 
-        this.ship01 = new Spaceship(this, gameWidth + borderUISize * 6, borderUISize * 4 + borderPadding * 0, 'spaceship', 0, 30, this.explosionGreen).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 1, 20, this.explosionGreen).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, gameWidth + borderUISize * 0, borderUISize * 6 + borderPadding * 4, 'spaceship', 2, 10, this.explosionGreen).setOrigin(0, 0);
+        this.ships = [
+            new Spaceship(this, gameWidth + borderUISize * 6, borderUISize * 4 + borderPadding * 0, 'spaceship', 0, 30, this.explosionGreen).setOrigin(0, 0),
+            new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 1, 20, this.explosionGreen).setOrigin(0, 0),
+            new Spaceship(this, gameWidth + borderUISize * 0, borderUISize * 6 + borderPadding * 4, 'spaceship', 2, 10, this.explosionGreen).setOrigin(0, 0)
+        ];
 
         { // Stays in here instead of GuiOverlay so that Space can draw over the borders and spaceships under borders
             // Border numbers
@@ -73,24 +76,18 @@ class Play extends Phaser.Scene {
         
         if (!this.gameOver) {
             this.p1Rocket.update(deltaSeconds);
-            this.ship01.update(deltaSeconds);
-            this.ship02.update(deltaSeconds);
-            this.ship03.update(deltaSeconds);
+            this.ships.forEach(ship => {
+                ship.update(deltaSeconds);
+            });
         }
 
         // check collisions
-        if(this.checkCollision(this.p1Rocket, this.ship01)) {
-            this.p1Rocket.explode();
-            this.ship01.explode();
-        };
-        if(this.checkCollision(this.p1Rocket, this.ship02)) {
-            this.p1Rocket.explode();
-            this.ship02.explode();
-        };
-        if(this.checkCollision(this.p1Rocket, this.ship03)) {
-            this.p1Rocket.explode();
-            this.ship03.explode();
-        };
+        this.ships.forEach(ship => {
+            if (this.checkCollision(this.p1Rocket, ship)) {
+                this.p1Rocket.explode();
+                ship.explode();
+            };
+        });
     }
 
     checkCollision(rocket, ship) {
@@ -99,6 +96,14 @@ class Play extends Phaser.Scene {
             && rocket.x + rocket.width > ship.x
             && rocket.y < ship.y + ship.height
             && rocket.height + rocket.y > ship.y;
+    }
+
+    accelerateShips() {
+        this.ships.forEach(ship => {
+            ship.moveSpeed += 100;
+        });
+
+        this.scoreOverlay.setTimerFlashing(true);
     }
 
     setGameOver() {
