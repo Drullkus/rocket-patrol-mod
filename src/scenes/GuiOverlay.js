@@ -89,9 +89,9 @@ class GuiOverlay extends Phaser.Scene {
         this.addScore(points);
 
         // text floating upwards
-        const text = this.add.text(centerX, centerY - 10, `+${points}`, this.pointsTextConfig);
+        const text = this.add.text(centerX, centerY, `+${points}`, this.pointsTextConfig).setOrigin(0.5);
         this.pointsFloatingText.push(text);
-        this.time.delayedCall(250, () => removeArrayElement(this.pointsFloatingText, text));
+        this.time.delayedCall(350, () => removeArrayElement(this.pointsFloatingText, text));
         this.time.delayedCall(750, () => text.destroy());
     }
 }
