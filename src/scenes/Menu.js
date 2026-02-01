@@ -39,7 +39,7 @@ class Menu extends Phaser.Scene {
     }
     
     create() {
-        ['', '-green'].forEach(suffix => 
+        ['', '-green'].forEach(suffix =>
             // 4 columns of animation sequences
             [0, 1, 2, 3].forEach((columnIndex, _index, list) => this.anims.create({
                 key: `explode-${columnIndex}${suffix}`,
@@ -112,7 +112,7 @@ class Menu extends Phaser.Scene {
         this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'Use ←→ arrows to move', menuConfig).setOrigin(0.5, 1);
         this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'and (F) to fire', menuConfig).setOrigin(0.5, 0);
 
-        this.add.text(gameWidth * 0.5, gameHeight * 0.8, 'Move to select difficulty:', menuConfig).setOrigin(0.5, 0);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.8, 'Hold arrow to select difficulty:', menuConfig).setOrigin(0.5, 0);
 
         this.add.text(gameWidth * 0.1, gameHeight * 0.9, '← Novice', {
             ...menuConfig,
