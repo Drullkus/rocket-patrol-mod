@@ -67,36 +67,7 @@ class Menu extends Phaser.Scene {
         this.noviceBar = this.add.rectangle(0, gameHeight, gameWidth, gameHeight * 0.05, 0xF3B141).setOrigin(0, 1);
         this.expertBar = this.add.rectangle(gameWidth, gameHeight, gameWidth, gameHeight * 0.05, 0x00FF00).setOrigin(1, 1);
 
-        const menuConfig = {
-            fontFamily: 'xirod',
-            fontSize: '26px',
-            color: '#FFF',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5
-            },
-            fixedWidth: 0
-        };
-        // display menu text
-        this.add.text(gameWidth * 0.5, gameHeight * 0.5 - borderUISize - borderPadding * 4, 'ROCKET TERMINAL', {
-            ...menuConfig,
-            fontSize: '50px',
-            color: '#FFF'
-        }).setOrigin(0.5);
-        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'Use ←→ arrows to move', menuConfig).setOrigin(0.5, 1);
-        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'and (F) to fire', menuConfig).setOrigin(0.5, 0);
-
-        this.add.text(gameWidth * 0.5, gameHeight * 0.8, 'Move to select difficulty:', menuConfig).setOrigin(0.5, 0);
-
-        this.add.text(gameWidth * 0.1, gameHeight * 0.9, '← Novice', {
-            ...menuConfig,
-            color: '#F3B141'
-        }).setOrigin(0, 0.5);
-        this.add.text(gameWidth * 0.9, gameHeight * 0.9, 'Expert →', {
-            ...menuConfig,
-            color: '#0F0'
-        }).setOrigin(1, 0.5);
+        this.setMenuText();
 
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -125,6 +96,32 @@ class Menu extends Phaser.Scene {
             this.sound.play('sfx-select');
             this.startExpert();
         }
+    }
+
+    setMenuText() {
+        const menuConfig = {
+            fontFamily: 'xirod',
+            fontSize: '26px',
+            color: '#FFF'
+        };
+        // display menu text
+        this.add.text(gameWidth * 0.5, gameHeight * 0.5 - borderUISize - borderPadding * 4, 'ROCKET TERMINAL', {
+            ...menuConfig,
+            fontSize: '50px',
+        }).setOrigin(0.5);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'Use ←→ arrows to move', menuConfig).setOrigin(0.5, 1);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'and (F) to fire', menuConfig).setOrigin(0.5, 0);
+
+        this.add.text(gameWidth * 0.5, gameHeight * 0.8, 'Move to select difficulty:', menuConfig).setOrigin(0.5, 0);
+
+        this.add.text(gameWidth * 0.1, gameHeight * 0.9, '← Novice', {
+            ...menuConfig,
+            color: '#F3B141'
+        }).setOrigin(0, 0.5);
+        this.add.text(gameWidth * 0.9, gameHeight * 0.9, 'Expert →', {
+            ...menuConfig,
+            color: '#0F0'
+        }).setOrigin(1, 0.5);
     }
 
     startNovice() {

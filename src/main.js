@@ -8,6 +8,7 @@ Turn-in Modifications implemented:
   1-Point Tier (5 items, 5 points total)
   - Create a new scrolling tile sprite for the background
     > Added space_dust.png
+    > Added galaxy.png from menu
   - Track a high score that persists across scenes and display it in the UI
     > Persisted in browser localStorage to last across sessions
     > High scores in storage separated by game mode
@@ -24,6 +25,9 @@ Turn-in Modifications implemented:
   - Display the time remaining (in seconds) on the screen
     > Added in GuiOverlay
   - Create a new title screen (e.g., new artwork, typography, layout)
+    > Created galaxy.png for menu background
+    > Added public-domain font "Xirod"
+    > Hold left/right key to begin instead of only pressing
   5-Point Tier (1 item, 5 points total)
   - Use Phaser's particle emitter to create a particle explosion when the rocket hits the spaceship
     > 4 columns of 4 frames, each particle instance picks a random column
