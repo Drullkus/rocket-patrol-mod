@@ -2,42 +2,61 @@
 
 Modification Title: Rocket Terminal
 
-EST. Time taken to modify: 14 hours (by far)
+EST. Time taken to modify: 16 hours (by far)
 
 Turn-in Modifications implemented:
+
   1-Point Tier (5 items, 5 points total)
+
   - Create a new scrolling tile sprite for the background
     > Added space_dust.png
     > Added galaxy.png from menu
+
   - Track a high score that persists across scenes and display it in the UI
     > Persisted in browser localStorage to last across sessions
     > High scores in storage separated by game mode
+
   - Implement the 'FIRE' UI text from the original game
     > Added in GuiOverlay
+
   - Implement the speed increase that happens after 30 seconds in the original game
     > Play.js calls accelerateShips() after 30000 milliseconds of beginning
+
   - Allow the player to control the Rocket after it's fired
     > Player controls rocket rotation. Visually, seems slightly cursed lol
-  3-Point Tier (4 items, 12 points total)
+
+
+3-Point Tier (4 items, 12 points total)
+
   - Implement parallax scrolling for the background
     > 5 layers in SpaceBackground.js [ space dust, space dust, starfield, starfield, star streaks shader ]
+
   - Using a texture atlas, create a new animated sprite (three frames minimum) for the enemy spaceships
+
   - Display the time remaining (in seconds) on the screen
     > Added in GuiOverlay
+
   - Create a new title screen (e.g., new artwork, typography, layout)
+
     > Created galaxy.png for menu background
     > Added public-domain font "Xirod"
     > Hold left/right key to begin instead of only pressing
-  5-Point Tier (1 item, 5 points total)
+
+
+  5-Point Tier (3 items, 15 points total)
+
   - Use Phaser's particle emitter to create a particle explosion when the rocket hits the spaceship
     > 4 columns of 4 frames, each particle instance picks a random column
     > Two variants for spaceships and rocket
+
   - Create a new enemy Spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points
     > bonus_spaceship.png, flies 25% faster, awards 60 points on hit
 
-TODO
-  5-Point Tier
   - Implement a new timing/scoring mechanism that adds time to the clock for successful hits and subtracts time for misses
+    > Spaceships award 1 second
+    > Bonus spaceship awards 5 seconds, enough to keep the game going if player locks in
+    > Rocket misses deduct 1 second
+    > Award shown as text floating from explosion
 
 Citations inlined as comments near relevant code
 */

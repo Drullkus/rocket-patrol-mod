@@ -40,10 +40,10 @@ class Play extends Phaser.Scene {
 
         const defaultSpeed = game.settings.spaceshipSpeed;
         this.ships = [
-            new Spaceship(this, gameWidth + borderUISize * 12, borderUISize * 3 + borderPadding * -1, 'bonus_spaceship', 0, 60, this.explosionGreen, defaultSpeed * 1.25).setOrigin(0, 0),
-            new Spaceship(this, gameWidth + borderUISize * 6, borderUISize * 4 + borderPadding * 0, 'spaceship', 0, 30, this.explosionGreen, defaultSpeed).setOrigin(0, 0),
-            new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 1, 20, this.explosionGreen, defaultSpeed).setOrigin(0, 0),
-            new Spaceship(this, gameWidth + borderUISize * 0, borderUISize * 6 + borderPadding * 4, 'spaceship', 2, 10, this.explosionGreen, defaultSpeed).setOrigin(0, 0)
+            new Spaceship(this, gameWidth + borderUISize * 12, borderUISize * 3 + borderPadding * -1, 'bonus_spaceship', 0, 60, 5, this.explosionGreen, defaultSpeed * 1.25).setOrigin(0, 0),
+            new Spaceship(this, gameWidth + borderUISize * 6, borderUISize * 4 + borderPadding * 0, 'spaceship', 0, 30, 1, this.explosionGreen, defaultSpeed).setOrigin(0, 0),
+            new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 1, 20, 1, this.explosionGreen, defaultSpeed).setOrigin(0, 0),
+            new Spaceship(this, gameWidth + borderUISize * 0, borderUISize * 6 + borderPadding * 4, 'spaceship', 2, 10, 1, this.explosionGreen, defaultSpeed).setOrigin(0, 0)
         ];
 
         { // Stays in here instead of GuiOverlay so that Space can draw over the borders and spaceships under borders
@@ -118,5 +118,17 @@ class Play extends Phaser.Scene {
 
     setShowFire(show) {
         this.scoreOverlay.setShowFire(show);
+    }
+
+    scorePoints(textX, textY, points) {
+        this.scoreOverlay.awardPoints(textX, textY, points);
+    }
+
+    scoreClockSeconds(textX, textY, seconds) {
+        this.clock.delay += seconds * 1000;
+
+        const text = seconds >= 0 ? `🕓+${seconds}` : `🕓${seconds}`;
+
+        this.scoreOverlay.createAwardText(textX, textY, text, '#9F9FFF');
     }
 }

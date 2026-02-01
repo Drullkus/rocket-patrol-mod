@@ -32,9 +32,6 @@ class GuiOverlay extends Phaser.Scene {
             backgroundColor: '#00FF00',
             color: '#008800'
         }
-        const orangeText = {
-            color: '#F3B141'
-        }
 
         this.p1Score = 0;
         this.p1ScoreObj = this.add.text(borderUISize + borderPadding, borderUISize, this.p1Score, {
@@ -49,16 +46,16 @@ class GuiOverlay extends Phaser.Scene {
 
         this.fireObj = this.add.text(gameWidth * 0.5, gameHeight - borderPadding * 0.5, "(F)IRE", {
             ...scoreConfig,
-            ...orangeText,
+            color: '#F3B141',
             align: 'center',
             fixedWidth: 150
         }).setOrigin(0.5, 1);
 
         this.timerObj = this.add.text(gameWidth * 0.5, borderUISize, this.clock.getRemaining(), {
             ...scoreConfig,
-            ...orangeText,
+            color: '#9F9FFF',
             align: 'center',
-            fixedWidth: 75
+            fixedWidth: 200
         }).setOrigin(0.5);
     }
 
@@ -78,7 +75,7 @@ class GuiOverlay extends Phaser.Scene {
         if (this.flashTimer) {
             const showStroke = (Math.round(secondsRemaining * 2) % 2) === 0;
             
-            this.timerObj.setStroke('#FFF', showStroke ? 4 : 0);
+            this.timerObj.setStroke('#5F5FBF', showStroke ? 4 : 0);
         }
     }
 
@@ -128,10 +125,25 @@ class GuiOverlay extends Phaser.Scene {
         this.addScore(points);
 
         // text floating upwards
-        const text = this.add.text(centerX, centerY, `+${points}`, this.pointsTextConfig).setOrigin(0.5);
-        this.pointsFloatingText.push(text);
-        this.time.delayedCall(350, () => removeArrayElement(this.pointsFloatingText, text));
-        this.time.delayedCall(750, () => text.destroy());
+        this.createAwardText(centerX, centerY, `+${points}`);
+    }
+
+    createAwardText(centerX, centerY, text, color) {
+        const textConfig = {
+            ...this.pointsTextConfig,
+            padding: {
+                top: 5 // To accomodate emojis
+            }
+        };
+
+        if (color) {
+            textConfig.color = color;
+        }
+
+        const textObj = this.add.text(centerX, centerY, text, textConfig).setOrigin(0.5);
+        this.pointsFloatingText.push(textObj);
+        this.time.delayedCall(350, () => removeArrayElement(this.pointsFloatingText, textObj));
+        this.time.delayedCall(750, () => textObj.destroy());
     }
 
     setShowFire(show) {
@@ -141,7 +153,7 @@ class GuiOverlay extends Phaser.Scene {
     setTimerFlashing(state) {
         this.flashTimer = state;
         if (!state) {
-            this.timerObj.setStroke('#FFF', 0);
+            this.timerObj.setStroke('#5F5FBF', 0);
         }
     }
 }

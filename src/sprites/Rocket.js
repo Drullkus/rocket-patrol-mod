@@ -51,7 +51,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
         }
         // reset on miss
         if (this.y <= yPosReset) {
-            this.explode();
+            this.miss();
         }
     }
 
@@ -60,6 +60,14 @@ class Rocket extends Phaser.GameObjects.Sprite {
         this.sfxShot.play();
         this.scene.setShowFire(false);
         this.fireX = this.x;
+    }
+
+    miss() {
+        const centerX = this.x + this.width * 0.5;
+        const centerY = this.y + this.height * 0.5;
+        this.scene.scoreClockSeconds(centerX, centerY + 20, -1);
+
+        this.explode();
     }
 
     explode() {
