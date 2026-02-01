@@ -13,12 +13,12 @@ class GuiOverlay extends Phaser.Scene {
         this.pointsFloatingText = [];
     }
 
-    create() {
+    create(data) {
+        this.clock = data.clock;
+        
         const scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
-            backgroundColor: '#00FF00',
-            color: '#008800',
             align: 'right',
             padding: {
                 top: 5,
@@ -27,16 +27,39 @@ class GuiOverlay extends Phaser.Scene {
             fixedWidth: 100
         };
 
-        this.p1Score = 0;
-        this.p1ScoreObj = this.add.text(borderUISize + borderPadding, borderUISize, this.p1Score, scoreConfig).setOrigin(0, 0.5);
+        const greenText = {
+            backgroundColor: '#00FF00',
+            color: '#008800'
+        }
+        const orangeText = {
+            backgroundColor: '#F3B141',
+            color: '#843605'
+        }
 
-        this.highScoreObj = this.add.text(gameWidth - borderUISize - borderPadding, borderUISize, getHighScore(), scoreConfig).setOrigin(1, 0.5);
+        this.p1Score = 0;
+        this.p1ScoreObj = this.add.text(borderUISize + borderPadding, borderUISize, this.p1Score, {
+            ...scoreConfig,
+            ...greenText
+        }).setOrigin(0, 0.5);
+
+        this.highScoreObj = this.add.text(gameWidth - borderUISize - borderPadding, borderUISize, getHighScore(), {
+            ...scoreConfig,
+            ...greenText
+        }).setOrigin(1, 0.5);
 
         this.fireObj = this.add.text(gameWidth * 0.5, gameHeight - borderPadding * 0.5, "(F)IRE", {
             ...scoreConfig,
+            ...orangeText,
             align: 'center',
             fixedWidth: 150
         }).setOrigin(0.5, 1);
+
+        this.timerObj = this.add.text(gameWidth * 0.5, borderUISize, this.clock.getRemaining(), {
+            ...scoreConfig,
+            ...orangeText,
+            align: 'center',
+            fixedWidth: 50
+        }).setOrigin(0.5);
     }
 
     update(time, deltaMillis) {
@@ -49,6 +72,8 @@ class GuiOverlay extends Phaser.Scene {
             this.highScoreText.setColor(colorHex);
             this.highScoreObj.setBackgroundColor(colorHex);
         }
+
+        this.timerObj.text = Math.ceil(this.clock.getRemaining() * 0.001);
     }
 
     setGameOver() {

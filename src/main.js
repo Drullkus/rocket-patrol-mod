@@ -17,6 +17,8 @@ Turn-in Modifications implemented:
   - Implement parallax scrolling for the background
     > 5 layers in SpaceBackground.js [ space dust, space dust, starfield, starfield, star streaks shader ]
   - Using a texture atlas, create a new animated sprite (three frames minimum) for the enemy spaceships
+  - Display the time remaining (in seconds) on the screen
+    > Added in GuiOverlay
   5-Point Tier
   - Use Phaser's particle emitter to create a particle explosion when the rocket hits the spaceship
     > 4 columns of 4 frames, each particle instance picks a random column
@@ -27,7 +29,6 @@ TODO
   - Implement the speed increase that happens after 30 seconds in the original game
   - Allow the player to control the Rocket after it's fired
   3-Point Tier
-  - Display the time remaining (in seconds) on the screen
   - Create a new title screen (e.g., new artwork, typography, layout)
   5-Point Tier
   - Create a new enemy Spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points

@@ -4,13 +4,15 @@ class Play extends Phaser.Scene {
     }
     
     create() {
+        this.clock = this.time.delayedCall(game.settings.gameTimer, this.setGameOver, null, this);
+        
         // Background
         this.spaceBackground = this.scene.add('spaceBackgroundScene', SpaceBackground, false);
         this.scene.launch('spaceBackgroundScene');
 
         // UI
         this.scoreOverlay = this.scene.add('guiOverlayScene', GuiOverlay, false);
-        this.scene.launch('guiOverlayScene');
+        this.scene.launch('guiOverlayScene', { clock: this.clock });
 
         // Green explosion for ships
         this.explosionGreen = this.add.particles(0, 0, `explosion-green`, {
@@ -58,8 +60,6 @@ class Play extends Phaser.Scene {
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
         this.gameOver = false;
-
-        this.clock = this.time.delayedCall(game.settings.gameTimer, this.setGameOver, null, this);
     }
 
     update(_time, deltaMillis) {
