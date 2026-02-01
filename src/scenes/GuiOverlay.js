@@ -31,6 +31,12 @@ class GuiOverlay extends Phaser.Scene {
         this.p1ScoreObj = this.add.text(borderUISize + borderPadding, borderUISize, this.p1Score, scoreConfig).setOrigin(0, 0.5);
 
         this.highScoreObj = this.add.text(gameWidth - borderUISize - borderPadding, borderUISize, getHighScore(), scoreConfig).setOrigin(1, 0.5);
+
+        this.fireObj = this.add.text(gameWidth * 0.5, gameHeight - borderPadding * 0.5, "(F)IRE", {
+            ...scoreConfig,
+            align: 'center',
+            fixedWidth: 150
+        }).setOrigin(0.5, 1);
     }
 
     update(time, deltaMillis) {
@@ -93,5 +99,9 @@ class GuiOverlay extends Phaser.Scene {
         this.pointsFloatingText.push(text);
         this.time.delayedCall(350, () => removeArrayElement(this.pointsFloatingText, text));
         this.time.delayedCall(750, () => text.destroy());
+    }
+
+    setShowFire(show) {
+        this.fireObj.setVisible(show);
     }
 }

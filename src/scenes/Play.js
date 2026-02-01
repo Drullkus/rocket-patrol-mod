@@ -106,4 +106,8 @@ class Play extends Phaser.Scene {
 
         this.gameOver = true;
     }
+
+    setShowFire(show) {
+        this.scoreOverlay.setShowFire(show);
+    }
 }
