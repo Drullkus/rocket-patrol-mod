@@ -36,8 +36,8 @@ class Play extends Phaser.Scene {
         this.p1Rocket = new Rocket(this, gameWidth * 0.5, gameHeight - borderUISize - borderPadding, 'rocket', null, this.explosion).setOrigin(0.5, 0);
 
         this.ship01 = new Spaceship(this, gameWidth + borderUISize * 6, borderUISize * 4 + borderPadding * 0, 'spaceship', 0, 30, this.explosionGreen).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20, this.explosionGreen).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, gameWidth + borderUISize * 0, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10, this.explosionGreen).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 1, 20, this.explosionGreen).setOrigin(0, 0);
+        this.ship03 = new Spaceship(this, gameWidth + borderUISize * 0, borderUISize * 6 + borderPadding * 4, 'spaceship', 2, 10, this.explosionGreen).setOrigin(0, 0);
 
         { // Stays in here instead of GuiOverlay so that Space can draw over the borders and spaceships under borders
             // Border numbers

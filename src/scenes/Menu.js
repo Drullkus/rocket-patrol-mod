@@ -16,7 +16,7 @@ class Menu extends Phaser.Scene {
     preload() {
         // load images/tile sprites
         this.load.image('rocket', './assets/rocket.png');
-        this.load.image('spaceship', './assets/spaceship.png');
+        this.load.spritesheet('spaceship', './assets/spaceship.png', { frameWidth: 64, frameHeight: 32 });
         this.load.image('starfield', './assets/starfield.png');
         this.load.image('space_dust', './assets/space_dust.png');
         this.load.image('star_streaks', './assets/star_streaks.png');
@@ -46,7 +46,14 @@ class Menu extends Phaser.Scene {
             }))
         );
 
-        let menuConfig = {
+        this.anims.create({
+            key: 'spaceship',
+            frames: this.anims.generateFrameNumbers('spaceship', { start: 0, end: 2 }),
+            repeat: -1,
+            frameRate: 10
+        })
+
+        const menuConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
             backgroundColor: '#F3B141',

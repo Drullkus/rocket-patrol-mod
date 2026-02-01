@@ -7,6 +7,8 @@ class Spaceship extends Phaser.GameObjects.Sprite {
         this.moveSpeed = game.settings.spaceshipSpeed;
 
         this.particleEffect = particleEffect;
+
+        this.play('spaceship');
     }
 
     update(deltaSeconds) {
@@ -41,5 +43,6 @@ class Spaceship extends Phaser.GameObjects.Sprite {
 
     reset() {
         this.x = gameWidth;
+        this.play('spaceship', false); // reset anim
     }
 }
