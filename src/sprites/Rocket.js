@@ -38,7 +38,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
             this.fire();
         }
 
-        const yPosReset = borderUISize * 3 + borderPadding;
+        const yPosReset = borderUISize * 2 + borderPadding;
         // if fired, move up
         if (this.isFiring && this.y >= yPosReset) {
             const increment = this.moveSpeed * deltaSeconds;

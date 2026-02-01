@@ -32,10 +32,11 @@ Turn-in Modifications implemented:
   - Use Phaser's particle emitter to create a particle explosion when the rocket hits the spaceship
     > 4 columns of 4 frames, each particle instance picks a random column
     > Two variants for spaceships and rocket
+  - Create a new enemy Spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points
+    > bonus_spaceship.png, flies 25% faster, awards 60 points on hit
 
 TODO
   5-Point Tier
-  - Create a new enemy Spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points
   - Implement a new timing/scoring mechanism that adds time to the clock for successful hits and subtracts time for misses
 
 Citations inlined as comments near relevant code

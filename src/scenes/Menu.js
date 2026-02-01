@@ -18,6 +18,7 @@ class Menu extends Phaser.Scene {
         this.load.font('xirod', './assets/xirod.otf', 'opentype'); // Obtained from https://www.1001fonts.com/xirod-font.html
 
         // load images/tile sprites
+        this.load.spritesheet('bonus_spaceship', './assets/bonus_spaceship.png', { frameWidth: 32, frameHeight: 16 });
         this.load.image('galaxy', './assets/galaxy.png');
         this.load.image('rocket', './assets/rocket.png');
         this.load.spritesheet('spaceship', './assets/spaceship.png', { frameWidth: 64, frameHeight: 32 });
@@ -50,12 +51,12 @@ class Menu extends Phaser.Scene {
             }))
         );
 
-        this.anims.create({
-            key: 'spaceship',
-            frames: this.anims.generateFrameNumbers('spaceship', { start: 0, end: 2 }),
+        ['', 'bonus_'].forEach(prefix => this.anims.create({
+            key: `${prefix}spaceship`,
+            frames: this.anims.generateFrameNumbers(`${prefix}spaceship`, { start: 0, end: 2 }),
             repeat: -1,
             frameRate: 10
-        })
+        }));
 
         this.mode = 0.5;
         this.modeSpeed = 0.015; // Higher values = less time to hold to enter one of the game modes
