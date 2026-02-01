@@ -66,7 +66,8 @@ const borderPadding = gameHeight / 45;
 var keyFIRE, keyRESET, keyLEFT, keyRIGHT;
 
 function getHighScore() {
-  return localStorage.getItem(getHighScoreName()) ?? 0;
+  const defaultHighScore = 100;
+  return localStorage.getItem(getHighScoreName()) ?? defaultHighScore;
 }
 
 function saveHighScore(score) {
