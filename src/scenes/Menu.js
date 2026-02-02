@@ -30,6 +30,8 @@ class Menu extends Phaser.Scene {
         const explosionAnimationConfig = { frameWidth: 16, frameHeight: 16, startFrame: 0, endFrame: 15 };
         this.load.spritesheet('explosion', './assets/explosion.png', explosionAnimationConfig);
         this.load.spritesheet('explosion-green', './assets/explosion-green.png', explosionAnimationConfig);
+        this.load.spritesheet('thrust-red', './assets/thrust-fire.png', explosionAnimationConfig);
+        this.load.spritesheet('thrust-green', './assets/thrust-energy.png', explosionAnimationConfig);
 
         // load audio
         this.load.audio('sfx-select', './assets/sfx-select.wav');
@@ -61,6 +63,17 @@ class Menu extends Phaser.Scene {
             [0, 1, 2, 3].forEach((columnIndex, _index, list) => this.anims.create({
                 key: `explode-${columnIndex}${suffix}`,
                 frames: this.anims.generateFrameNumbers(`explosion${suffix}`, {
+                    frames: [1, 0, 1, 2, 3].map(rowIndex => rowIndex * list.length + columnIndex)
+                }),
+                frameRate: 15
+            }))
+        );
+
+        ['thrust-red', 'thrust-green'].forEach(name =>
+            // 4 columns of animation sequences
+            [0, 1, 2, 3].forEach((columnIndex, _index, list) => this.anims.create({
+                key: `${name}-${columnIndex}`,
+                frames: this.anims.generateFrameNumbers(name, {
                     frames: [1, 0, 1, 2, 3].map(rowIndex => rowIndex * list.length + columnIndex)
                 }),
                 frameRate: 15

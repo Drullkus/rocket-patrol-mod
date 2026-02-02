@@ -1,5 +1,5 @@
 class Spaceship extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, frame, pointValue, timePointsSeconds, particleEffect, moveSpeed) {
+    constructor(scene, x, y, texture, frame, pointValue, timePointsSeconds, thrustParticle, explosionParticle, moveSpeed) {
         super(scene, x, y, texture, frame);
 
         scene.add.existing(this); // add to existing scene
@@ -7,7 +7,8 @@ class Spaceship extends Phaser.GameObjects.Sprite {
         this.timePoints = timePointsSeconds;
         this.moveSpeed = moveSpeed;
 
-        this.particleEffect = particleEffect;
+        this.explosionParticle = explosionParticle;
+        this.thrustParticle = thrustParticle;
 
         this.play(texture);
     }
@@ -21,6 +22,9 @@ class Spaceship extends Phaser.GameObjects.Sprite {
             this.reset();
         }
 
+        if (this.visible) {
+            this.thrustParticle.emitParticle(1, this.x + this.width * 0.65, this.y + this.height * 0.5);
+        }
     }
 
     explode() {
@@ -31,13 +35,13 @@ class Spaceship extends Phaser.GameObjects.Sprite {
         this.scene.scoreClockSeconds(centerX, centerY + 30, this.timePoints);
 
         // temporarily hide ship
-        this.alpha = 0;
+        this.setVisible(false);
 
         // create explosion particle effects at ship's position
-        this.particleEffect.emitParticle(10, centerX, centerY);
+        this.explosionParticle.emitParticle(10, centerX, centerY);
         this.scene.time.delayedCall(500, () => {
             this.reset();
-            this.alpha = 1;
+            this.setVisible(true);
         });
 
         this.scene.sound.play('sfx-explosion');

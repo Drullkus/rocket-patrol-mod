@@ -1,5 +1,5 @@
 class Rocket extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, frame, particleEffect) {
+    constructor(scene, x, y, texture, frame, thrustParticle, explosionParticle) {
         super(scene, x, y, texture, frame);
 
         // add object to existing scene
@@ -12,7 +12,8 @@ class Rocket extends Phaser.GameObjects.Sprite {
 
         this.sfxShot = scene.sound.add('sfx-shot');
 
-        this.particleEffect = particleEffect;
+        this.thrustParticle = thrustParticle;
+        this.explosionParticle = explosionParticle;
 
         this.angularSpeed = 1/256;
     }
@@ -44,10 +45,11 @@ class Rocket extends Phaser.GameObjects.Sprite {
             const increment = this.moveSpeed * deltaSeconds;
             const movementDirection = new Phaser.Math.Vector2(0, -1);
             movementDirection.rotate(this.rotation);
-            movementDirection.scale(increment);
 
-            this.x += movementDirection.x;
-            this.y += movementDirection.y;
+            this.x += movementDirection.x * increment;
+            this.y += movementDirection.y * increment;
+
+            this.thrustParticle.emitParticle(1, this.x - movementDirection.x * this.height, this.y - movementDirection.y * this.height);
         }
         // reset on miss
         if (this.y <= yPosReset) {
@@ -74,7 +76,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
         const centerX = this.x + this.width * 0.5;
         const centerY = this.y + this.height * 0.5;
 
-        this.particleEffect.emitParticle(4, centerX, centerY);
+        this.explosionParticle.emitParticle(4, centerX, centerY);
 
         this.isFiring = false;
         this.x = this.fireX;

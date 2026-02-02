@@ -24,6 +24,15 @@ class Play extends Phaser.Scene {
             rotate: { start: 0, end: 90 },
             emitting: false
         });
+        // Green thrust for ships
+        this.thrustGreen = this.add.particles(0, 0, `thrust-green`, {
+            anim: [0, 1, 2, 3].map(index => `thrust-green-${index}`),
+            lifespan: { min: 50, max: 250 },
+            speed: { min: 10, max: 50 },
+            scale: 2,
+            rotate: { start: 0, end: 90 },
+            emitting: false
+        });
 
         // Smaller explosion for rocket
         this.explosion = this.add.particles(0, 0, `explosion`, {
@@ -34,16 +43,25 @@ class Play extends Phaser.Scene {
             rotate: { start: 0, end: 45 },
             emitting: false
         });
+        // Red thrust for rocket
+        this.thrustRed = this.add.particles(0, 0, `thrust-red`, {
+            anim: [0, 1, 2, 3].map(index => `thrust-red-${index}`),
+            lifespan: { min: 50, max: 250 },
+            speed: { min: 1, max: 25 },
+            scale: 1.5,
+            rotate: { start: 0, end: 90 },
+            emitting: false
+        });
 
         // Entities
-        this.p1Rocket = new Rocket(this, gameWidth * 0.5, gameHeight - borderUISize - borderPadding, 'rocket', null, this.explosion).setOrigin(0.5, 0);
+        this.p1Rocket = new Rocket(this, gameWidth * 0.5, gameHeight - borderUISize - borderPadding, 'rocket', null, this.thrustRed, this.explosion).setOrigin(0.5, 0);
 
         const defaultSpeed = game.settings.spaceshipSpeed;
         this.ships = [
-            new Spaceship(this, gameWidth + borderUISize * 12, borderUISize * 3 + borderPadding * -1, 'bonus_spaceship', 0, 60, 5, this.explosionGreen, defaultSpeed * 1.25).setOrigin(0, 0),
-            new Spaceship(this, gameWidth + borderUISize * 6, borderUISize * 4 + borderPadding * 0, 'spaceship', 0, 30, 1, this.explosionGreen, defaultSpeed).setOrigin(0, 0),
-            new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 1, 20, 1, this.explosionGreen, defaultSpeed).setOrigin(0, 0),
-            new Spaceship(this, gameWidth + borderUISize * 0, borderUISize * 6 + borderPadding * 4, 'spaceship', 2, 10, 1, this.explosionGreen, defaultSpeed).setOrigin(0, 0)
+            new Spaceship(this, gameWidth + borderUISize * 12, borderUISize * 3 + borderPadding * -1, 'bonus_spaceship', 0, 60, 5, this.thrustGreen, this.explosionGreen, defaultSpeed * 1.25).setOrigin(0, 0),
+            new Spaceship(this, gameWidth + borderUISize * 6, borderUISize * 4 + borderPadding * 0, 'spaceship', 0, 30, 1, this.thrustGreen, this.explosionGreen, defaultSpeed).setOrigin(0, 0),
+            new Spaceship(this, gameWidth + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 1, 20, 1, this.thrustGreen, this.explosionGreen, defaultSpeed).setOrigin(0, 0),
+            new Spaceship(this, gameWidth + borderUISize * 0, borderUISize * 6 + borderPadding * 4, 'spaceship', 2, 10, 1, this.thrustGreen, this.explosionGreen, defaultSpeed).setOrigin(0, 0)
         ];
 
         { // Stays in here instead of GuiOverlay so that Space can draw over the borders and spaceships under borders
