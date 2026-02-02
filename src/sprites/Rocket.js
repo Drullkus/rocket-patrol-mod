@@ -20,17 +20,22 @@ class Rocket extends Phaser.GameObjects.Sprite {
 
     update(deltaSeconds) {
         // left/right movement
-        if (!this.isFiring) {
+        if (!this.isFiring) { // Strafe when "stationed"
             if (keyLEFT.isDown && this.x >= borderUISize + this.width) {
                 this.x -= this.moveSpeed * deltaSeconds;
             } else if (keyRIGHT.isDown && this.x <= gameWidth - borderUISize - this.width) {
                 this.x += this.moveSpeed * deltaSeconds;
             }
-        } else {
+        } else { // Rotate while in flight
             if (keyLEFT.isDown) {
                 this.setRotation(this.rotation - this.angularSpeed * deltaSeconds);
             } else if (keyRIGHT.isDown) {
                 this.setRotation(this.rotation + this.angularSpeed * deltaSeconds);
+            }
+
+            // Blow up rocket if under the side borders
+            if (this.x < borderUISize * 0.85 + this.width || this.x > gameWidth - borderUISize * 0.85 - this.width) {
+                this.miss();
             }
         }
 
