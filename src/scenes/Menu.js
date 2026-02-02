@@ -116,12 +116,17 @@ class Menu extends Phaser.Scene {
         // title
         this.add.text(gameWidth * 0.5, gameHeight * 0.5 - borderUISize - borderPadding * 4, 'ROCKET TERMINAL', {
             ...menuConfig,
-            fontSize: '50px',
-        }).setOrigin(0.5);
+            fontSize: '50px'
+        }).setOrigin(0.5, 1);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.5 - borderUISize - borderPadding * 4, 'A Rocket Patrol clone by Drullkus', {
+            ...menuConfig,
+            fontSize: '16.5px',
+            color: '#CCD'
+        }).setOrigin(0.5, 0);
 
         // instructions
-        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'Use ←→ arrows to move', menuConfig).setOrigin(0.5, 1);
-        this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'and (F) to fire', menuConfig).setOrigin(0.5, 0);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.6, 'Use ←→ arrows to move', menuConfig).setOrigin(0.5, 1);
+        this.add.text(gameWidth * 0.5, gameHeight * 0.6, 'and (F) to fire', menuConfig).setOrigin(0.5, 0);
 
         // difficulty selector
         this.add.text(gameWidth * 0.5, gameHeight * 0.9, 'Hold arrow to select difficulty:', menuConfig).setOrigin(0.5, 0);
@@ -153,8 +158,9 @@ class Menu extends Phaser.Scene {
 
         const noviceLerp = Math.max(0, 1 - (2 * (this.mode)));
         const expertLerp = Math.max(0, 1 - (2 * (1 - this.mode)));
-        this.noviceBar.scaleX = noviceLerp;
-        this.expertBar.scaleX = expertLerp;
+        // sqrt makes bar go fast first then slower
+        this.noviceBar.scaleX = Math.sqrt(noviceLerp);
+        this.expertBar.scaleX = Math.sqrt(expertLerp);
 
         if (this.mode === 0) {
             this.sound.play('sfx-select');

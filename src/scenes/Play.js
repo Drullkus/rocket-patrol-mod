@@ -94,7 +94,7 @@ class Play extends Phaser.Scene {
 
         const deltaSeconds = deltaMillis * 0.001;
 
-        if (!this.gameOver) {
+        if (!this.gameOver) { // Destroyed when game over
             this.p1Rocket.update(deltaSeconds);
         }
         
@@ -128,8 +128,6 @@ class Play extends Phaser.Scene {
     }
 
     setGameOver() {
-        this.spaceBackground.scrolling = false;
-
         this.scoreOverlay.setGameOver();
 
         this.gameOver = true;
