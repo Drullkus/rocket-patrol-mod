@@ -93,13 +93,14 @@ class Play extends Phaser.Scene {
         }
 
         const deltaSeconds = deltaMillis * 0.001;
-        
+
         if (!this.gameOver) {
             this.p1Rocket.update(deltaSeconds);
-            this.ships.forEach(ship => {
-                ship.update(deltaSeconds);
-            });
         }
+        
+        this.ships.forEach(ship => {
+            ship.update(deltaSeconds);
+        });
 
         // check collisions
         this.ships.forEach(ship => {
@@ -132,6 +133,9 @@ class Play extends Phaser.Scene {
         this.scoreOverlay.setGameOver();
 
         this.gameOver = true;
+
+        this.p1Rocket.explode();
+        this.p1Rocket.destroy();
     }
 
     setShowFire(show) {
