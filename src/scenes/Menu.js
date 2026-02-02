@@ -46,7 +46,7 @@ class Menu extends Phaser.Scene {
         this.createAnimations();
 
         this.mode = 0.5;
-        this.modeSpeed = 0.015; // Higher values = less time to hold to enter one of the game modes
+        this.modeSpeed = 0.5;
 
         this.createMenuBackground();
         this.createMenuUi();
@@ -137,11 +137,12 @@ class Menu extends Phaser.Scene {
         }).setOrigin(1, 0.5);
     }
 
-    update() {
+    update(_time, deltaMillis) {
+        const deltaSeconds = deltaMillis * 0.001;
         if (keyLEFT.isDown) {
-            this.mode = Math.max(this.mode - this.modeSpeed, 0);
+            this.mode = Math.max(this.mode - this.modeSpeed * deltaSeconds, 0);
         } else if (keyRIGHT.isDown) {
-            this.mode = Math.min(this.mode + this.modeSpeed, 1);
+            this.mode = Math.min(this.mode + this.modeSpeed * deltaSeconds, 1);
         } else {
             this.mode = Phaser.Math.Linear(this.mode, 0.5, 0.1);
         }
