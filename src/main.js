@@ -58,7 +58,12 @@ Turn-in Modifications implemented:
     > Rocket misses deduct 1 second
     > Award shown as text floating from explosion
 
-Citations inlined as comments near relevant code
+Citations:
+  xirod.otf https://www.1001fonts.com/xirod-font.html
+  Factorio Space Platform background https://factorio.com/blog/post/fff-411
+  Remove element from array https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array-in-javascript
+  huetoRGBInteger https://stackoverflow.com/a/17243070
+  Favicon https://www.w3schools.com/html/html_favicon.asp
 */
 
 'use strict';
