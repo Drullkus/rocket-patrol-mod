@@ -18,13 +18,14 @@ class Menu extends Phaser.Scene {
         this.load.font('xirod', './assets/xirod.otf', 'opentype'); // Obtained from https://www.1001fonts.com/xirod-font.html
 
         // load images/tile sprites
-        this.load.spritesheet('bonus_spaceship', './assets/bonus_spaceship.png', { frameWidth: 32, frameHeight: 16 });
         this.load.image('galaxy', './assets/galaxy.png');
         this.load.image('rocket', './assets/rocket.png');
-        this.load.spritesheet('spaceship', './assets/spaceship.png', { frameWidth: 64, frameHeight: 32 });
         this.load.image('space_dust', './assets/space_dust.png');
         this.load.image('starfield', './assets/starfield.png');
         this.load.image('star_streaks', './assets/star_streaks.png');
+
+        this.load.spritesheet('bonus_spaceship', './assets/bonus_spaceship.png', { frameWidth: 32, frameHeight: 16 });
+        this.load.spritesheet('spaceship', './assets/spaceship.png', { frameWidth: 64, frameHeight: 32 });
 
         const explosionAnimationConfig = { frameWidth: 16, frameHeight: 16, startFrame: 0, endFrame: 15 };
         this.load.spritesheet('explosion', './assets/explosion.png', explosionAnimationConfig);
@@ -46,7 +47,6 @@ class Menu extends Phaser.Scene {
         this.modeSpeed = 0.015; // Higher values = less time to hold to enter one of the game modes
 
         this.createMenuBackground();
-
         this.createMenuUi();
 
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -75,31 +75,6 @@ class Menu extends Phaser.Scene {
         }));
     }
 
-    update() {
-        if (keyLEFT.isDown) {
-            this.mode = Math.max(this.mode - this.modeSpeed, 0);
-        } else if (keyRIGHT.isDown) {
-            this.mode = Math.min(this.mode + this.modeSpeed, 1);
-        } else {
-            this.mode = Phaser.Math.Linear(this.mode, 0.5, 0.1);
-        }
-
-        this.galaxy.tilePositionX = (1 - this.mode) * 400;
-        this.distantStars.tilePositionX = this.mode * 425;
-        this.stars.tilePositionX = this.mode * 350;
-
-        this.noviceBar.scaleX = 1 - (2 * this.mode);
-        this.expertBar.scaleX = 1 - (2 * (1 - this.mode));
-
-        if (this.mode === 0) {
-            this.sound.play('sfx-select');
-            this.startNovice();
-        } else if (this.mode === 1) {
-            this.sound.play('sfx-select');
-            this.startExpert();
-        }
-    }
-
     createMenuBackground() {
         this.galaxy = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'galaxy').setOrigin(0).setAlpha(0.75);
         this.galaxy.tilePositionX = 200;
@@ -116,32 +91,64 @@ class Menu extends Phaser.Scene {
     }
 
     createMenuUi() {
-        this.noviceBar = this.add.rectangle(0, gameHeight, gameWidth, gameHeight * 0.05, 0xF3B141).setOrigin(0, 1);
-        this.expertBar = this.add.rectangle(gameWidth, gameHeight, gameWidth, gameHeight * 0.05, 0x00FF00).setOrigin(1, 1);
+        this.expertBar = this.add.rectangle(0, gameHeight, gameWidth, gameHeight * 0.05, 0x00FF00).setOrigin(0, 1);
+        this.noviceBar = this.add.rectangle(gameWidth, gameHeight, gameWidth, gameHeight * 0.05, 0xF3B141).setOrigin(1, 1);
 
         const menuConfig = {
             fontFamily: 'xirod',
             fontSize: '26px',
             color: '#FFF'
         };
-        // display menu text
+
+        // title
         this.add.text(gameWidth * 0.5, gameHeight * 0.5 - borderUISize - borderPadding * 4, 'ROCKET TERMINAL', {
             ...menuConfig,
             fontSize: '50px',
         }).setOrigin(0.5);
+
+        // instructions
         this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'Use ←→ arrows to move', menuConfig).setOrigin(0.5, 1);
         this.add.text(gameWidth * 0.5, gameHeight * 0.5, 'and (F) to fire', menuConfig).setOrigin(0.5, 0);
 
-        this.add.text(gameWidth * 0.5, gameHeight * 0.8, 'Hold arrow to select difficulty:', menuConfig).setOrigin(0.5, 0);
+        // difficulty selector
+        this.add.text(gameWidth * 0.5, gameHeight * 0.9, 'Hold arrow to select difficulty:', menuConfig).setOrigin(0.5, 0);
 
-        this.add.text(gameWidth * 0.1, gameHeight * 0.9, '← Novice', {
-            ...menuConfig,
-            color: '#F3B141'
-        }).setOrigin(0, 0.5);
-        this.add.text(gameWidth * 0.9, gameHeight * 0.9, 'Expert →', {
+        this.add.text(gameWidth * 0.1, gameHeight * 0.975, '← Novice', {
             ...menuConfig,
             color: '#0F0'
+        }).setOrigin(0, 0.5);
+
+        this.add.text(gameWidth * 0.9, gameHeight * 0.975, 'Expert →', {
+            ...menuConfig,
+            color: '#F3B141'
         }).setOrigin(1, 0.5);
+    }
+
+    update() {
+        if (keyLEFT.isDown) {
+            this.mode = Math.max(this.mode - this.modeSpeed, 0);
+        } else if (keyRIGHT.isDown) {
+            this.mode = Math.min(this.mode + this.modeSpeed, 1);
+        } else {
+            this.mode = Phaser.Math.Linear(this.mode, 0.5, 0.1);
+        }
+
+        this.galaxy.tilePositionX = (1 - this.mode) * 400;
+        this.distantStars.tilePositionX = this.mode * 425;
+        this.stars.tilePositionX = this.mode * 350;
+
+        const noviceLerp = Math.max(0, 1 - (2 * (this.mode)));
+        const expertLerp = Math.max(0, 1 - (2 * (1 - this.mode)));
+        this.noviceBar.scaleX = noviceLerp;
+        this.expertBar.scaleX = expertLerp;
+
+        if (this.mode === 0) {
+            this.sound.play('sfx-select');
+            this.startNovice();
+        } else if (this.mode === 1) {
+            this.sound.play('sfx-select');
+            this.startExpert();
+        }
     }
 
     startNovice() {
