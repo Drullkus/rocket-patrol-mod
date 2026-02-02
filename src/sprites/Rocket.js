@@ -15,7 +15,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
         this.thrustParticle = thrustParticle;
         this.explosionParticle = explosionParticle;
 
-        this.angularSpeed = 1/256;
+        this.angularSpeed = 0.25;
     }
 
     update(deltaSeconds) {
@@ -28,9 +28,9 @@ class Rocket extends Phaser.GameObjects.Sprite {
             }
         } else {
             if (keyLEFT.isDown) {
-                this.setRotation(this.rotation - this.angularSpeed);
+                this.setRotation(this.rotation - this.angularSpeed * deltaSeconds);
             } else if (keyRIGHT.isDown) {
-                this.setRotation(this.rotation + this.angularSpeed);
+                this.setRotation(this.rotation + this.angularSpeed * deltaSeconds);
             }
         }
 
